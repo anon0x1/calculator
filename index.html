@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Take-Home Salary Calculator (2025–26)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* General Styles */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f7fb;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 40px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      font-size: 1.5em;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0 20px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      transition: border 0.3s ease-in-out;
+    }
+
+    input[type="number"]:focus {
+      border: 1px solid #007bff;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      color: white;
+      background-color: #007bff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .result h3 {
+      margin-top: 0;
+      color: #333;
+    }
+
+    .value {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .tax-highlight {
+      color: #d9534f;
+      font-weight: bold;
+    }
+
+    .note {
+      font-size: 0.85em;
+      color: #555;
+    }
+
+    .deduction-group {
+      margin-top: 20px;
+    }
+
+    .deduction-group input {
+      width: 100%;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px;
+      }
+
+      h2 {
+        font-size: 1.2em;
+      }
+
+      button {
+        padding: 12px;
+      }
+
+      .result {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Take-Home Salary Calculator (FY 2025–26)</h2>
+
+    <label for="gross">Monthly Gross Salary (INR)</label>
+    <input type="number" id="gross" placeholder="Enter your gross monthly salary" required>
+
+    <label for="basicPercentage">Percentage of Basic Salary (Default: 40%)</label>
+    <input type="number" id="basicPercentage" value="40" placeholder="Enter basic salary percentage (e.g., 40)" required>
+
+    <label for="pfPercentage">Employee PF Contribution Percentage (Default: 12%)</label>
+    <input type="number" id="pfPercentage" value="12" placeholder="Enter PF contribution percentage (e.g., 12)" required>
+
+    <div class="deduction-group">
+      <label for="deduction1">Other Deduction 1 (INR)</label>
+      <input type="number" id="deduction1" placeholder="Enter any other deduction (e.g., loan, insurance)">
+    </div>
+    
+    <div class="deduction-group">
+      <label for="deduction2">Other Deduction 2 (INR)</label>
+      <input type="number" id="deduction2" placeholder="Enter another deduction">
+    </div>
+
+    <button onclick="calculateTakeHome()">Calculate Take-Home</button>
+
+    <div class="result" id="result">
+      <h3>Results:</h3>
+      <p>Annual Gross Salary: <span class="value" id="annualGross"></span></p>
+      <p>Basic Salary: <span class="value" id="basicSalary"></span></p>
+      <p>Employee PF Deduction (12% of Basic): <span class="value" id="pf"></span></p>
+      <p>Other Deductions: <span class="value" id="totalDeductions"></span></p>
+      <p id="taxInfo" class="tax-highlight" style="display: none;">Taxable Income Above ₹12 LPA: <span class="value" id="taxableIncome"></span></p>
+      <p>Estimated Monthly Take-Home: <span class="value" id="takeHome"></span></p>
+      <p class="note"><small>* Assuming zero income tax (for annual income up to ₹12LPA)</small></p>
+    </div>
+  </div>
+
+  <script>
+    function calculateTakeHome() {
+      const gross = parseFloat(document.getElementById('gross').value);
+      const basicPercentage = parseFloat(document.getElementById('basicPercentage').value) / 100;
+      const pfPercentage = parseFloat(document.getElementById('pfPercentage').value) / 100;
+
+      const deduction1 = parseFloat(document.getElementById('deduction1').value) || 0;
+      const deduction2 = parseFloat(document.getElementById('deduction2').value) || 0;
+
+      if (isNaN(gross) || gross <= 0 || isNaN(basicPercentage) || basicPercentage <= 0 || isNaN(pfPercentage) || pfPercentage <= 0) {
+        alert("Please enter valid values for salary, basic percentage, and PF percentage.");
+        return;
+      }
+
+      // Calculate the Basic Salary and PF
+      const basicSalary = gross * basicPercentage;
+      const pf = basicSalary * pfPercentage;
+
+      // Calculate the annual gross salary
+      const annualGross = gross * 12;
+
+      // Apply tax exemption for income up to ₹12LPA
+      let tax = 0;
+      let taxableIncome = 0;
+      if (annualGross > 1200000) {
+        taxableIncome = annualGross - 1200000;
+        tax = taxableIncome * 0.05;  // Simple flat tax rate above ₹12LPA (adjust as per your tax regime)
+      }
+
+      // Total deductions (PF + other deductions)
+      const totalDeductions = pf + deduction1 + deduction2;
+      
+      // Calculate the take-home salary (gross minus PF, tax, and additional deductions)
+      const takeHome = gross - totalDeductions - (tax / 12);  // Dividing tax by 12 to get the monthly tax deduction
+
+      // Display the results
+      document.getElementById('annualGross').innerText = `₹${annualGross.toLocaleString()}`;
+      document.getElementById('basicSalary').innerText = `₹${basicSalary.toFixed(2)}`;
+      document.getElementById('pf').innerText = `₹${pf.toFixed(2)}`;
+      document.getElementById('totalDeductions').innerText = `₹${totalDeductions.toFixed(2)}`;
+      document.getElementById('takeHome').innerText = `₹${takeHome.toFixed(2)}`;
+
+      // Highlight taxable income if applicable
+      if (taxableIncome > 0) {
+        document.getElementById('taxableIncome').innerText = `₹${taxableIncome.toLocaleString()}`;
+        document.getElementById('taxInfo').style.display = 'block';
+      } else {
+        document.getElementById('taxInfo').style.display = 'none';
+      }
+
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
