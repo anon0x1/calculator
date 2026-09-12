@@ -5,43 +5,126 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>All-in-One Financial Calculators</title>
 <style>
+:root{
+ --bg:#f7f9fc;--surface:#fff;--text:#172033;--muted:#738096;
+ --border:#e7ebf2;--accent:#00a878;--accent2:#536dfe;
+ --soft:#eafaf5;--softblue:#f1f4ff;--shadow:0 14px 38px rgba(27,39,70,.09);
+}
 *{box-sizing:border-box}
-body{margin:0;border-top:7px solid #222;font-family:Arial,sans-serif;background:#fff;color:#253858}
-.container{max-width:1100px;margin:24px auto;padding:0 20px}
-h1{font-size:30px;margin:0 0 8px}.subtitle{color:#6b778c;margin:0 0 24px;font-size:14px}
-.tabs{display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid #ddd;margin-bottom:18px;padding-bottom:8px}
-.tab{border:0;background:#f5f7fa;color:#253858;padding:11px 16px;border-radius:5px;cursor:pointer;font-size:14px;white-space:nowrap}
-.tab.active{background:#e8f8f2;color:#008c68;font-weight:bold}
-.panel{display:none;border:1px solid #e1e4e8;border-radius:7px;padding:32px}
-.panel.active{display:block}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:45px}
-.field{margin-bottom:28px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}
-.label{font-size:15px}.value{background:#e8f8f2;color:#008c68;padding:8px 14px;min-width:105px;text-align:center;font-weight:bold;border-radius:3px;white-space:nowrap}
-input[type=range]{width:100%;accent-color:#00b386;cursor:pointer}
-.range-labels{display:flex;justify-content:space-between;color:#7a869a;font-size:11px;margin-top:7px}
-.text-input,.select-input{width:100%;padding:11px 13px;border:1px solid #d8dde5;border-radius:5px;font-size:16px;color:#253858;background:#fff}
-.text-input:focus,.select-input:focus{outline:none;border-color:#00a878}
+html{scroll-behavior:smooth}
+body{
+ margin:0;border-top:5px solid #172033;font-family:Inter,ui-sans-serif,Arial,sans-serif;
+ background:
+radial-gradient(circle at 12% 0%,rgba(0,168,120,.055),transparent 28%),
+radial-gradient(circle at 90% 8%,rgba(83,109,254,.06),transparent 30%),
+linear-gradient(180deg,#fbfcfe 0%,#f5f7fb 100%);color:var(--text);
+}
+.container{max-width:1080px;margin:0 auto;padding:42px 20px 60px}
+.hero-head{text-align:center;margin-bottom:28px}
+.hero-head h1{font-size:36px;letter-spacing:-1px;margin:0 0 9px}
+.hero-head .subtitle{font-size:15px;color:var(--muted);margin:0}
+.tabs{
+ display:flex;gap:7px;overflow-x:auto;padding:7px;margin:0 auto 20px;
+ background:#fff;border:1px solid var(--border);border-radius:12px;
+ box-shadow:0 5px 20px rgba(27,39,70,.04);scrollbar-width:none
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+ border:0;background:transparent;color:#5d687b;padding:12px 17px;border-radius:8px;
+ cursor:pointer;font-size:14px;white-space:nowrap;transition:all .22s ease
+}
+.tab:hover{background:#f3f6fa;color:var(--text);transform:translateY(-1px)}
+.tab.active{background:var(--soft);color:#008c68;font-weight:700;box-shadow:inset 0 0 0 1px rgba(0,168,120,.08)}
+.panel{
+ display:none;border:1px solid var(--border);border-radius:16px;padding:34px;
+ background:rgba(255,255,255,.96);box-shadow:var(--shadow);transition:box-shadow .25s ease,transform .25s ease
+}
+.panel.active{display:block;animation:panelIn .32s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:55px}
+.field{margin-bottom:30px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}
+.label{font-size:15px;font-weight:600}
+.value{
+ background:var(--soft);color:#008c68;padding:8px 14px;min-width:108px;text-align:center;
+ font-weight:700;border-radius:7px;white-space:nowrap;transition:transform .18s ease
+}
+.field:hover .value{transform:scale(1.025)}
+input[type=range]{width:100%;height:5px;accent-color:var(--accent);cursor:pointer}
+input[type=range]::-webkit-slider-thumb{transition:transform .15s ease}
+input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
+.range-labels{display:flex;justify-content:space-between;color:#8a95a7;font-size:11px;margin-top:8px}
+.emi-box,.hero{
+ padding:27px;background:linear-gradient(135deg,#f2f5ff 0%,#fbfcff 55%,#f0fbf7 100%);
+ border:1px solid #e4e9f7;border-radius:15px;text-align:center;margin-bottom:25px;
+ box-shadow:0 8px 24px rgba(42,57,98,.06)
+}
+.big{font-size:38px;font-weight:800;color:var(--accent2);margin-top:7px;letter-spacing:-.7px}
+.small{font-size:13px;color:var(--muted)}
+.error{font-size:12px;color:#d64545;min-height:17px;margin-top:6px}
+.rows{margin-top:25px}
+.row{
+ display:flex;justify-content:space-between;gap:15px;padding:15px 0;
+ border-bottom:1px solid #edf0f5;font-size:15px;transition:padding .18s ease
+}
+.row:last-child{border-bottom:0}
+.row:hover{padding-left:4px;padding-right:4px}
+.row strong{white-space:nowrap}
+ .chart{
+ width:225px;height:225px;border-radius:50%;margin:12px auto 22px;
+ background:conic-gradient(from -90deg,var(--chart2,#536dfe) 0 var(--p),var(--chart1,#e9edf8) var(--p) 100%);
+ display:flex;align-items:center;justify-content:center;
+ box-shadow:0 12px 34px rgba(46,63,110,.13),inset 0 0 0 1px rgba(255,255,255,.7);
+ transition:background .45s ease,transform .25s ease;
+ position:relative
+}
+.chart:hover{transform:scale(1.025)}
+.chart-inner{
+ width:148px;height:148px;border-radius:50%;background:rgba(255,255,255,.98);
+ display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+ gap:3px;font-size:13px;line-height:1.35;color:var(--muted);
+ box-shadow:0 4px 18px rgba(46,63,110,.08),inset 0 0 0 1px #edf0f5
+}
+.chart-title{font-size:16px;font-weight:800;color:#253858}
+.chart-sub{font-size:11px;color:#7b879b}
+.legend{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:var(--muted);font-size:12px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px}
+.d1{background:#e9edf8}.d2{background:var(--accent2)}
+.note{font-size:12px;line-height:1.6;color:#7a869a;margin-top:19px}
+.emi-box input[type=number]{
+ width:175px;border:0;background:transparent;text-align:center;outline:none;
+ font-size:38px;font-weight:800;color:var(--accent2);letter-spacing:-.7px
+}
+.emi-box input[type=number]:focus{border-bottom:2px solid var(--accent2)}
+.select-input,.text-input{
+ width:100%;padding:12px 13px;border:1px solid #dce1e9;border-radius:8px;
+ font-size:15px;color:var(--text);background:#fff;outline:none
+}
+.select-input:focus,.text-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,168,120,.08)}
 .input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.emi-box,.hero{padding:25px;background:#f5f8ff;border-radius:8px;text-align:center;margin-bottom:25px}
-.big{font-size:36px;font-weight:bold;color:#536dfe;margin-top:7px}
-.small{font-size:13px;color:#6b778c}.error{font-size:12px;color:#d64545;min-height:17px;margin-top:6px}
-.rows{margin-top:25px}.row{display:flex;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid #edf0f5;font-size:15px}.row:last-child{border-bottom:0}.row strong{white-space:nowrap}
-.note{font-size:12px;line-height:1.5;color:#7a869a;margin-top:18px}
-.chart{width:210px;height:210px;border-radius:50%;margin:5px auto 24px;background:conic-gradient(#536dfe var(--p),#edf0ff 0);display:flex;align-items:center;justify-content:center}
-.chart-inner{width:140px;height:140px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;line-height:1.5;color:#6b778c}
-.legend{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;color:#6b778c;font-size:12px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px}.d1{background:#edf0ff}.d2{background:#536dfe}
-.button{border:0;background:#00a878;color:white;padding:11px 18px;border-radius:5px;cursor:pointer;font-weight:bold}
-@media(max-width:760px){.grid{grid-template-columns:1fr}.panel{padding:22px}.container{padding:0 12px}.big{font-size:32px}}
+@media(max-width:760px){
+ .container{padding:28px 12px 45px}.hero-head h1{font-size:30px}
+ .grid{grid-template-columns:1fr;gap:10px}.panel{padding:22px;border-radius:13px}
+ .tabs{border-radius:10px}.tab{padding:11px 14px}.big,.emi-box input[type=number]{font-size:32px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+.charge-field{margin-top:5px}
+.money-input{width:100%;box-sizing:border-box;border:1px solid #dfe5f1;background:#fff;border-radius:10px;padding:10px 12px;font:inherit;color:#20304d;outline:none;transition:border-color .2s,box-shadow .2s}
+.money-input:focus{border-color:#536dfe;box-shadow:0 0 0 3px rgba(83,109,254,.10)}
 </style>
 </head>
 <body>
 <div class="container">
+<div class="hero-head">
 <h1>Financial Calculators</h1>
-<p class="subtitle">Common Indian finance calculators in one page. Change any input and results update instantly.</p>
+<p class="subtitle">Simple, fast calculators for everyday money decisions.</p>
+</div>
 
 <div class="tabs">
 <button class="tab active" data-tab="loan">Loan EMI</button>
-<button class="tab" data-tab="ctc">CTC → Net Home</button>
+<button class="tab" data-tab="ctc">Net Home</button>
 <button class="tab" data-tab="sip">SIP</button>
 <button class="tab" data-tab="fd">Fixed Deposit</button>
 <button class="tab" data-tab="interest">Interest</button>
@@ -54,6 +137,9 @@ input[type=range]{width:100%;accent-color:#00b386;cursor:pointer}
 <div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
 <div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"><div class="range-labels"><span>0%</span><span>30%</span></div></div>
 <div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><input id="loanTenure" type="range" min="1" max="360" value="36"><div class="range-labels"><span>1 month</span><span>30 years</span></div></div>
+<div class="field charge-field"><div class="head"><span class="label">Processing Fee</span><span class="value">₹</span></div><input id="processingFee" class="money-input" type="number" min="0" step="100" value="0" inputmode="numeric"></div>
+<div class="field charge-field"><div class="head"><span class="label">GST</span><span class="value">₹</span></div><input id="loanGST" class="money-input" type="number" min="0" step="100" value="0" inputmode="numeric"></div>
+<div class="field charge-field"><div class="head"><span class="label">Other Charges</span><span class="value">₹</span></div><input id="otherCharges" class="money-input" type="number" min="0" step="100" value="0" inputmode="numeric"></div>
 
 </div><div>
 <div class="emi-box">
@@ -65,25 +151,34 @@ aria-label="Monthly EMI"
 style="width:170px;border:0;background:transparent;text-align:center;font-size:36px;font-weight:bold;color:#536dfe;outline:none">
 </div>
 <div class="small" id="loanPayments">36 monthly payments</div>
-<div class="small" style="margin-top:8px">Edit EMI directly to calculate the required tenure.</div>
+
 <div class="error" id="loanError"></div>
 </div>
-<div class="chart" id="loanChart" style="--p:28%"><div class="chart-inner">Principal<br>+<br>Interest</div></div>
+<div class="chart" id="loanChart" style="--p:28%"><div class="chart-inner"><div class="chart-title">Total Cost</div><div class="chart-sub">Principal + interest</div></div></div>
 <div class="legend"><span><i class="dot d1"></i>Principal: <b id="loanPP">72%</b></span><span><i class="dot d2"></i>Interest: <b id="loanIP">28%</b></span></div>
-<div class="rows"><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span>Total interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span>Total cost with interest</span><strong id="loanTotal">₹2,78,000</strong></div></div>
-<div class="note">Uses the standard reducing-balance EMI formula. Move the tenure slider to calculate EMI, or edit the Monthly EMI directly to calculate the required tenure. Displayed currency values are rounded to the nearest rupee.</div>
+<div style="margin:22px 0 4px">
+<div style="height:8px;border-radius:20px;background:#edf0f6;overflow:hidden">
+<div id="loanProgress" style="height:100%;width:72%;background:linear-gradient(90deg,#00a878,#536dfe);border-radius:20px;transition:width .45s ease"></div>
+</div>
+</div>
+<div class="rows"><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span>Total interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span>Processing fee</span><strong id="loanProcessingFee">₹0</strong></div><div class="row"><span>GST</span><strong id="loanGSTAmount">₹0</strong></div><div class="row"><span>Other charges</span><strong id="loanOtherCharges">₹0</strong></div><div class="row"><span>Total cost with interest + charges</span><strong id="loanTotal">₹2,78,000</strong></div></div>
+<div class="note">Uses the standard reducing-balance EMI formula. Optional bank charges are included in the total cost. Displayed currency values are rounded to the nearest rupee.</div>
 </div></div>
 </section>
 
 <!-- CTC -->
 <section class="panel" id="ctc">
 <div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Annual CTC</span><span class="value" id="ctcV">₹12,00,000</span></div><input id="ctc" type="range" min="100000" max="10000000" step="10000" value="1200000"><div class="range-labels"><span>₹1L</span><span>₹1 Cr</span></div></div>
+<div class="field"><div class="head"><span class="label">Annual CTC</span><span class="value" id="ctcV">₹12,00,000</span></div><input id="ctcInput" type="range" min="100000" max="10000000" step="10000" value="1200000"><div class="range-labels"><span>₹1L</span><span>₹1 Cr</span></div></div>
 <div class="field"><div class="head"><span class="label">Employee PF</span><span class="value" id="pfV">₹1,800/mo</span></div><input id="pf" type="range" min="0" max="25000" step="100" value="1800"><div class="range-labels"><span>₹0</span><span>₹25K/mo</span></div></div>
 <div class="field"><div class="head"><span class="label">Professional tax</span><span class="value" id="ptV">₹200/mo</span></div><input id="pt" type="range" min="0" max="500" step="50" value="200"></div>
 <div class="field"><div class="head"><span class="label">Income tax estimate</span><span class="value" id="taxV">₹0</span></div><input id="tax" type="range" min="0" max="300000" step="5000" value="0"><div class="small" style="margin-top:7px">Enter your estimated annual income-tax deduction. This calculator does not assume a tax regime.</div></div>
 </div><div>
 <div class="hero"><div class="small">Estimated monthly take-home</div><div class="big" id="netHome">₹98,000</div></div>
+<div class="chart" id="ctcChart" style="--p:98%;--chart1:#e4e9f7;--chart2:#00a878">
+  <div class="chart-inner"><div class="chart-title">Take-home</div><div class="chart-sub">after entered deductions</div></div>
+</div>
+<div class="legend"><span><i class="dot d1"></i>Deductions: <b id="ctcDP">2%</b></span><span><i class="dot" style="background:#00a878"></i>Take-home: <b id="ctcNP">98%</b></span></div>
 <div class="rows"><div class="row"><span>Annual CTC</span><strong id="ctcAnnual">₹12,00,000</strong></div><div class="row"><span>Monthly gross</span><strong id="grossMonthly">₹1,00,000</strong></div><div class="row"><span>Annual employee PF</span><strong id="pfAnnual">₹21,600</strong></div><div class="row"><span>Annual professional tax</span><strong id="ptAnnual">₹2,400</strong></div><div class="row"><span>Annual income tax</span><strong id="taxAnnual">₹0</strong></div><div class="row"><span>Estimated annual take-home</span><strong id="netAnnual">₹11,76,000</strong></div></div>
 <div class="note">CTC structures differ between employers. This is an estimate based only on the deductions you enter; it does not calculate employer PF, gratuity, bonus, stock, or income tax rules automatically.</div>
 </div></div>
@@ -97,7 +192,7 @@ style="width:170px;border:0;background:transparent;text-align:center;font-size:3
 <div class="field"><div class="head"><span class="label">Investment period</span><span class="value" id="sipTenureV">10 Yrs</span></div><input id="sipTenure" type="range" min="1" max="40" value="10"><div class="range-labels"><span>1 year</span><span>40 years</span></div></div>
 </div><div>
 <div class="hero"><div class="small">Estimated maturity value</div><div class="big" id="sipTotal">₹23,23,391</div></div>
-<div class="chart" id="sipChart" style="--p:50%"><div class="chart-inner">Invested<br>+<br>Returns</div></div>
+<div class="chart" id="sipChart" style="--p:50%;--chart1:#dfe6f5;--chart2:#536dfe"><div class="chart-inner"><div class="chart-title">SIP Value</div><div class="chart-sub">Invested + returns</div></div></div>
 <div class="legend"><span><i class="dot d1"></i>Invested: <b id="sipIP">51%</b></span><span><i class="dot d2"></i>Returns: <b id="sipRP">49%</b></span></div>
 <div class="rows"><div class="row"><span>Total invested</span><strong id="sipInvested">₹12,00,000</strong></div><div class="row"><span>Estimated returns</span><strong id="sipReturns">₹11,23,391</strong></div><div class="row"><span>Total value</span><strong id="sipValue">₹23,23,391</strong></div></div>
 <div class="note">Assumes monthly investment and monthly compounding at the expected annual return. Actual mutual-fund returns are market-dependent and not guaranteed.</div>
@@ -146,9 +241,15 @@ style="width:170px;border:0;background:transparent;text-align:center;font-size:3
 </section>
 </div>
 
+<style>
+@keyframes valuePulse{0%{opacity:.55;transform:translateY(2px)}100%{opacity:1;transform:none}}
+.pulse{animation:valuePulse .22s ease}
+</style>
 <script>
 const $=id=>document.getElementById(id);
 const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+function pulse(el){if(!el)return;el.classList.remove("pulse");void el.offsetWidth;el.classList.add("pulse");}
+function setText(id,value){const el=$(id);if(!el)return;if(el.textContent!==String(value)){el.textContent=value;pulse(el)}}
 const money2=n=>"₹"+n.toLocaleString("en-IN",{maximumFractionDigits:0});
 
 document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
@@ -170,17 +271,22 @@ function loanEMI(P,a,n){
 }
 let loanEMIEditing=false;
 function renderLoan(P,a,n,emi){
- const total=emi*n,interest=Math.max(0,total-P),ip=total?P/total*100:100,rp=100-ip;
+ const processing=Math.max(0,Number($("processingFee").value)||0),gst=Math.max(0,Number($("loanGST").value)||0),other=Math.max(0,Number($("otherCharges").value)||0);
+ const charges=processing+gst+other,total=emi*n+charges,interest=Math.max(0,emi*n-P),ip=(emi*n)?P/(emi*n)*100:100,rp=100-ip;
  $("loanAmountV").textContent=money(P);
  $("loanRateV").textContent=a+"%";
  $("loanTenureV").textContent=loanTenureText(n);
- $("loanMonths").textContent=n+" months";
+ setText("loanMonths",n+" months");
  $("loanPrincipal").textContent=money(P);
- $("loanInterest").textContent=money(interest);
- $("loanTotal").textContent=money(total);
+ setText("loanInterest",money(interest));
+ setText("loanProcessingFee",money(processing));
+ setText("loanGSTAmount",money(gst));
+ setText("loanOtherCharges",money(other));
+ setText("loanTotal",money(total));
  $("loanEmi").value=Math.round(emi);
  $("loanPayments").textContent=n+" monthly payments";
  $("loanChart").style.setProperty("--p",rp+"%");
+ $("loanProgress").style.width=Math.max(0,Math.min(100,ip))+"%";
  $("loanPP").textContent=Math.round(ip)+"%";
  $("loanIP").textContent=Math.round(rp)+"%";
 }
@@ -215,23 +321,30 @@ function calcLoanFromEMI(){
 $("loanAmount").addEventListener("input",calcLoanFromTenure);
 $("loanRate").addEventListener("input",calcLoanFromTenure);
 $("loanTenure").addEventListener("input",calcLoanFromTenure);
+["processingFee","loanGST","otherCharges"].forEach(id=>$(id).addEventListener("input",()=>{
+ const P=+$("loanAmount").value,a=+$("loanRate").value,n=+$("loanTenure").value;
+ renderLoan(P,a,n,loanEMI(P,a,n));
+}));
 $("loanEmi").addEventListener("input",calcLoanFromEMI);
 calcLoanFromTenure();
 
 function calcCTC(){
- const c=+$("ctc").value,pf=+$("pf").value,pt=+$("pt").value,tax=+$("tax").value;
+ const c=+$("ctcInput").value,pf=+$("pf").value,pt=+$("pt").value,tax=+$("tax").value;
  const annualPF=pf*12,annualPT=pt*12,net=c-annualPF-annualPT-tax;
  $("ctcV").textContent=money(c);$("pfV").textContent=money(pf)+"/mo";$("ptV").textContent=money(pt)+"/mo";$("taxV").textContent=money(tax);
  $("ctcAnnual").textContent=money(c);$("grossMonthly").textContent=money(c/12);$("pfAnnual").textContent=money(annualPF);$("ptAnnual").textContent=money(annualPT);$("taxAnnual").textContent=money(tax);
- $("netAnnual").textContent=money(Math.max(0,net));$("netHome").textContent=money(Math.max(0,net/12));
+ const safeNet=Math.max(0,net), deductions=Math.max(0,c-safeNet), netPct=c?safeNet/c*100:0, dedPct=100-netPct;
+ $("netAnnual").textContent=money(safeNet);setText("netHome",money(safeNet/12));
+ $("ctcChart").style.setProperty("--p",Math.max(0,Math.min(100,netPct))+"%");
+ $("ctcDP").textContent=Math.round(dedPct)+"%";$("ctcNP").textContent=Math.round(netPct)+"%";
 }
-["ctc","pf","pt","tax"].forEach(x=>$(x).addEventListener("input",calcCTC));calcCTC();
+["ctcInput","pf","pt","tax"].forEach(x=>$(x).addEventListener("input",calcCTC));calcCTC();
 
 function calcSIP(){
  const p=+$("sipAmt").value,r=+$("sipRate").value/1200,n=+$("sipTenure").value*12;
  const total=r? p*((Math.pow(1+r,n)-1)/r)*(1+r):p*n,invest=p*n,returns=total-invest,ip=total?invest/total*100:100;
  $("sipV").textContent=money(p);$("sipRateV").textContent=$("sipRate").value+"%";$("sipTenureV").textContent=$("sipTenure").value+" Yrs";
- $("sipTotal").textContent=money(total);$("sipInvested").textContent=money(invest);$("sipReturns").textContent=money(returns);$("sipValue").textContent=money(total);
+ setText("sipTotal",money(total));$("sipInvested").textContent=money(invest);$("sipReturns").textContent=money(returns);$("sipValue").textContent=money(total);
  $("sipChart").style.setProperty("--p",(100-ip)+"%");$("sipIP").textContent=Math.round(ip)+"%";$("sipRP").textContent=Math.round(100-ip)+"%";
 }
 ["sipAmt","sipRate","sipTenure"].forEach(x=>$(x).addEventListener("input",calcSIP));calcSIP();
@@ -240,7 +353,7 @@ function calcFD(){
  const P=+$("fdAmt").value,a=+$("fdRate").value/100,n=+$("fdTenure").value,f=+$("fdFreq").value;
  const total=P*Math.pow(1+a/f,f*n),interest=total-P;
  $("fdV").textContent=money(P);$("fdRateV").textContent=$("fdRate").value+"%";$("fdTenureV").textContent=$("fdTenure").value+" Yrs";
- $("fdTotal").textContent=money(total);$("fdPrincipal").textContent=money(P);$("fdInterest").textContent=money(interest);$("fdMaturity").textContent=money(total);
+ setText("fdTotal",money(total));$("fdPrincipal").textContent=money(P);$("fdInterest").textContent=money(interest);$("fdMaturity").textContent=money(total);
 }
 ["fdAmt","fdRate","fdTenure","fdFreq"].forEach(x=>$(x).addEventListener("input",calcFD));calcFD();
 
@@ -250,7 +363,7 @@ function calcInterest(){
  if($("intType").value==="simple")total=P*(1+a*t);else total=P*Math.pow(1+a,t);
  const interest=total-P;
  $("intV").textContent=money(P);$("intRateV").textContent=$("intRate").value+"%";$("intTimeV").textContent=t+(t===1?" Yr":" Yrs");
- $("intTotal").textContent=money(total);$("intPrincipal").textContent=money(P);$("intInterest").textContent=money(interest);$("intAmount").textContent=money(total);
+ setText("intTotal",money(total));$("intPrincipal").textContent=money(P);$("intInterest").textContent=money(interest);$("intAmount").textContent=money(total);
 }
 ["intAmt","intRate","intTime","intType"].forEach(x=>$(x).addEventListener("input",calcInterest));calcInterest();
 
@@ -259,7 +372,7 @@ function calcGST(){
  let base,tax,total;
  if(inclusive){total=x;base=x/(1+r);tax=total-base}else{base=x;tax=x*r;total=x+tax}
  $("gstV").textContent=money(x);$("gstRateV").textContent=$("gstRate").value+"%";
- $("gstTotal").textContent=money(total);$("gstBase").textContent=money(base);$("gstTax").textContent=money(tax);$("gstFinal").textContent=money(total);
+ setText("gstTotal",money(total));$("gstBase").textContent=money(base);$("gstTax").textContent=money(tax);$("gstFinal").textContent=money(total);
 }
 ["gstAmt","gstRate","gstMode"].forEach(x=>$(x).addEventListener("input",calcGST));calcGST();
 </script>
