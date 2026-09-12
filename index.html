@@ -1,221 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Take-Home Salary Calculator (2025–26)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    /* General Styles */
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f7fb;
-    }
-
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 40px;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease-in-out;
-    }
-
-    h2 {
-      text-align: center;
-      color: #333;
-      font-size: 1.5em;
-      margin-bottom: 30px;
-    }
-
-    label {
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
-    }
-
-    input[type="number"], input[type="text"] {
-      width: 100%;
-      padding: 14px;
-      margin: 10px 0 20px;
-      font-size: 16px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      transition: border 0.3s ease-in-out;
-    }
-
-    input[type="number"]:focus {
-      border: 1px solid #007bff;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      font-size: 16px;
-      color: white;
-      background-color: #007bff;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .result {
-      margin-top: 30px;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-      display: none;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .result h3 {
-      margin-top: 0;
-      color: #333;
-    }
-
-    .value {
-      font-weight: bold;
-      color: #007bff;
-    }
-
-    .tax-highlight {
-      color: #d9534f;
-      font-weight: bold;
-    }
-
-    .note {
-      font-size: 0.85em;
-      color: #555;
-    }
-
-    .deduction-group {
-      margin-top: 20px;
-    }
-
-    .deduction-group input {
-      width: 100%;
-    }
-
-    /* Responsive Styles */
-    @media (max-width: 600px) {
-      .container {
-        padding: 30px;
-      }
-
-      h2 {
-        font-size: 1.2em;
-      }
-
-      button {
-        padding: 12px;
-      }
-
-      .result {
-        padding: 15px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>All-in-One Financial Calculators</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;border-top:7px solid #222;font-family:Arial,sans-serif;background:#fff;color:#253858}
+.container{max-width:1100px;margin:24px auto;padding:0 20px}
+h1{font-size:30px;margin:0 0 8px}.subtitle{color:#6b778c;margin:0 0 24px;font-size:14px}
+.tabs{display:flex;gap:8px;overflow-x:auto;border-bottom:1px solid #ddd;margin-bottom:18px;padding-bottom:8px}
+.tab{border:0;background:#f5f7fa;color:#253858;padding:11px 16px;border-radius:5px;cursor:pointer;font-size:14px;white-space:nowrap}
+.tab.active{background:#e8f8f2;color:#008c68;font-weight:bold}
+.panel{display:none;border:1px solid #e1e4e8;border-radius:7px;padding:32px}
+.panel.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:45px}
+.field{margin-bottom:28px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}
+.label{font-size:15px}.value{background:#e8f8f2;color:#008c68;padding:8px 14px;min-width:105px;text-align:center;font-weight:bold;border-radius:3px;white-space:nowrap}
+input[type=range]{width:100%;accent-color:#00b386;cursor:pointer}
+.range-labels{display:flex;justify-content:space-between;color:#7a869a;font-size:11px;margin-top:7px}
+.text-input,.select-input{width:100%;padding:11px 13px;border:1px solid #d8dde5;border-radius:5px;font-size:16px;color:#253858;background:#fff}
+.text-input:focus,.select-input:focus{outline:none;border-color:#00a878}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.emi-box,.hero{padding:25px;background:#f5f8ff;border-radius:8px;text-align:center;margin-bottom:25px}
+.big{font-size:36px;font-weight:bold;color:#536dfe;margin-top:7px}
+.small{font-size:13px;color:#6b778c}.error{font-size:12px;color:#d64545;min-height:17px;margin-top:6px}
+.rows{margin-top:25px}.row{display:flex;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid #edf0f5;font-size:15px}.row:last-child{border-bottom:0}.row strong{white-space:nowrap}
+.note{font-size:12px;line-height:1.5;color:#7a869a;margin-top:18px}
+.chart{width:210px;height:210px;border-radius:50%;margin:5px auto 24px;background:conic-gradient(#536dfe var(--p),#edf0ff 0);display:flex;align-items:center;justify-content:center}
+.chart-inner{width:140px;height:140px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;line-height:1.5;color:#6b778c}
+.legend{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;color:#6b778c;font-size:12px}.dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px}.d1{background:#edf0ff}.d2{background:#536dfe}
+.button{border:0;background:#00a878;color:white;padding:11px 18px;border-radius:5px;cursor:pointer;font-weight:bold}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.panel{padding:22px}.container{padding:0 12px}.big{font-size:32px}}
+</style>
 </head>
 <body>
+<div class="container">
+<h1>Financial Calculators</h1>
+<p class="subtitle">Common Indian finance calculators in one page. Change any input and results update instantly.</p>
 
-  <div class="container">
-    <h2>Take-Home Salary Calculator (FY 2025–26)</h2>
+<div class="tabs">
+<button class="tab active" data-tab="loan">Loan EMI</button>
+<button class="tab" data-tab="ctc">CTC → Net Home</button>
+<button class="tab" data-tab="sip">SIP</button>
+<button class="tab" data-tab="fd">Fixed Deposit</button>
+<button class="tab" data-tab="interest">Interest</button>
+<button class="tab" data-tab="gst">GST</button>
+</div>
 
-    <label for="gross">Monthly Gross Salary (INR)</label>
-    <input type="number" id="gross" placeholder="Enter your gross monthly salary" required>
+<!-- LOAN -->
+<section class="panel active" id="loan">
+<div class="grid"><div>
+<div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
+<div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"><div class="range-labels"><span>0%</span><span>30%</span></div></div>
+<div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><input id="loanTenure" type="range" min="1" max="360" value="36"><div class="range-labels"><span>1 month</span><span>30 years</span></div></div>
 
-    <label for="basicPercentage">Percentage of Basic Salary (Default: 40%)</label>
-    <input type="number" id="basicPercentage" value="40" placeholder="Enter basic salary percentage (e.g., 40)" required>
+</div><div>
+<div class="emi-box">
+<div class="small">Monthly EMI</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:2px">
+<span style="font-size:36px;font-weight:bold;color:#536dfe">₹</span>
+<input id="loanEmi" type="number" min="1" step="1" value="6739"
+aria-label="Monthly EMI"
+style="width:170px;border:0;background:transparent;text-align:center;font-size:36px;font-weight:bold;color:#536dfe;outline:none">
+</div>
+<div class="small" id="loanPayments">36 monthly payments</div>
+<div class="small" style="margin-top:8px">Edit EMI directly to calculate the required tenure.</div>
+<div class="error" id="loanError"></div>
+</div>
+<div class="chart" id="loanChart" style="--p:28%"><div class="chart-inner">Principal<br>+<br>Interest</div></div>
+<div class="legend"><span><i class="dot d1"></i>Principal: <b id="loanPP">72%</b></span><span><i class="dot d2"></i>Interest: <b id="loanIP">28%</b></span></div>
+<div class="rows"><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span>Total interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span>Total cost with interest</span><strong id="loanTotal">₹2,78,000</strong></div></div>
+<div class="note">Uses the standard reducing-balance EMI formula. Move the tenure slider to calculate EMI, or edit the Monthly EMI directly to calculate the required tenure. Displayed currency values are rounded to the nearest rupee.</div>
+</div></div>
+</section>
 
-    <label for="pfPercentage">Employee PF Contribution Percentage (Default: 12%)</label>
-    <input type="number" id="pfPercentage" value="12" placeholder="Enter PF contribution percentage (e.g., 12)" required>
+<!-- CTC -->
+<section class="panel" id="ctc">
+<div class="grid"><div>
+<div class="field"><div class="head"><span class="label">Annual CTC</span><span class="value" id="ctcV">₹12,00,000</span></div><input id="ctc" type="range" min="100000" max="10000000" step="10000" value="1200000"><div class="range-labels"><span>₹1L</span><span>₹1 Cr</span></div></div>
+<div class="field"><div class="head"><span class="label">Employee PF</span><span class="value" id="pfV">₹1,800/mo</span></div><input id="pf" type="range" min="0" max="25000" step="100" value="1800"><div class="range-labels"><span>₹0</span><span>₹25K/mo</span></div></div>
+<div class="field"><div class="head"><span class="label">Professional tax</span><span class="value" id="ptV">₹200/mo</span></div><input id="pt" type="range" min="0" max="500" step="50" value="200"></div>
+<div class="field"><div class="head"><span class="label">Income tax estimate</span><span class="value" id="taxV">₹0</span></div><input id="tax" type="range" min="0" max="300000" step="5000" value="0"><div class="small" style="margin-top:7px">Enter your estimated annual income-tax deduction. This calculator does not assume a tax regime.</div></div>
+</div><div>
+<div class="hero"><div class="small">Estimated monthly take-home</div><div class="big" id="netHome">₹98,000</div></div>
+<div class="rows"><div class="row"><span>Annual CTC</span><strong id="ctcAnnual">₹12,00,000</strong></div><div class="row"><span>Monthly gross</span><strong id="grossMonthly">₹1,00,000</strong></div><div class="row"><span>Annual employee PF</span><strong id="pfAnnual">₹21,600</strong></div><div class="row"><span>Annual professional tax</span><strong id="ptAnnual">₹2,400</strong></div><div class="row"><span>Annual income tax</span><strong id="taxAnnual">₹0</strong></div><div class="row"><span>Estimated annual take-home</span><strong id="netAnnual">₹11,76,000</strong></div></div>
+<div class="note">CTC structures differ between employers. This is an estimate based only on the deductions you enter; it does not calculate employer PF, gratuity, bonus, stock, or income tax rules automatically.</div>
+</div></div>
+</section>
 
-    <div class="deduction-group">
-      <label for="deduction1">Other Deduction 1 (INR)</label>
-      <input type="number" id="deduction1" placeholder="Enter any other deduction (e.g., loan, insurance)">
-    </div>
-    
-    <div class="deduction-group">
-      <label for="deduction2">Other Deduction 2 (INR)</label>
-      <input type="number" id="deduction2" placeholder="Enter another deduction">
-    </div>
+<!-- SIP -->
+<section class="panel" id="sip">
+<div class="grid"><div>
+<div class="field"><div class="head"><span class="label">Monthly investment</span><span class="value" id="sipV">₹10,000</span></div><input id="sipAmt" type="range" min="500" max="500000" step="500" value="10000"><div class="range-labels"><span>₹500</span><span>₹5L</span></div></div>
+<div class="field"><div class="head"><span class="label">Expected return (p.a.)</span><span class="value" id="sipRateV">12%</span></div><input id="sipRate" type="range" min="0" max="30" step=".1" value="12"></div>
+<div class="field"><div class="head"><span class="label">Investment period</span><span class="value" id="sipTenureV">10 Yrs</span></div><input id="sipTenure" type="range" min="1" max="40" value="10"><div class="range-labels"><span>1 year</span><span>40 years</span></div></div>
+</div><div>
+<div class="hero"><div class="small">Estimated maturity value</div><div class="big" id="sipTotal">₹23,23,391</div></div>
+<div class="chart" id="sipChart" style="--p:50%"><div class="chart-inner">Invested<br>+<br>Returns</div></div>
+<div class="legend"><span><i class="dot d1"></i>Invested: <b id="sipIP">51%</b></span><span><i class="dot d2"></i>Returns: <b id="sipRP">49%</b></span></div>
+<div class="rows"><div class="row"><span>Total invested</span><strong id="sipInvested">₹12,00,000</strong></div><div class="row"><span>Estimated returns</span><strong id="sipReturns">₹11,23,391</strong></div><div class="row"><span>Total value</span><strong id="sipValue">₹23,23,391</strong></div></div>
+<div class="note">Assumes monthly investment and monthly compounding at the expected annual return. Actual mutual-fund returns are market-dependent and not guaranteed.</div>
+</div></div>
+</section>
 
-    <button onclick="calculateTakeHome()">Calculate Take-Home</button>
+<!-- FD -->
+<section class="panel" id="fd">
+<div class="grid"><div>
+<div class="field"><div class="head"><span class="label">Deposit amount</span><span class="value" id="fdV">₹2,00,000</span></div><input id="fdAmt" type="range" min="10000" max="10000000" step="10000" value="200000"></div>
+<div class="field"><div class="head"><span class="label">Interest rate (p.a.)</span><span class="value" id="fdRateV">7%</span></div><input id="fdRate" type="range" min="1" max="15" step=".1" value="7"></div>
+<div class="field"><div class="head"><span class="label">Tenure</span><span class="value" id="fdTenureV">5 Yrs</span></div><input id="fdTenure" type="range" min="1" max="10" step=".5" value="5"></div>
+<div class="field"><div class="head"><span class="label">Compounding</span><span class="value">Selected</span></div><select class="select-input" id="fdFreq"><option value="4">Quarterly</option><option value="12">Monthly</option><option value="2">Half-yearly</option><option value="1">Yearly</option></select></div>
+</div><div>
+<div class="hero"><div class="small">Maturity amount</div><div class="big" id="fdTotal">₹2,82,910</div></div>
+<div class="rows"><div class="row"><span>Principal deposited</span><strong id="fdPrincipal">₹2,00,000</strong></div><div class="row"><span>Interest earned</span><strong id="fdInterest">₹82,910</strong></div><div class="row"><span>Maturity amount</span><strong id="fdMaturity">₹2,82,910</strong></div></div>
+<div class="note">Uses compound interest based on the selected compounding frequency. Bank FD taxation/TDS is not included.</div>
+</div></div>
+</section>
 
-    <div class="result" id="result">
-      <h3>Results:</h3>
-      <p>Annual Gross Salary: <span class="value" id="annualGross"></span></p>
-      <p>Basic Salary: <span class="value" id="basicSalary"></span></p>
-      <p>Employee PF Deduction (12% of Basic): <span class="value" id="pf"></span></p>
-      <p>Other Deductions: <span class="value" id="totalDeductions"></span></p>
-      <p id="taxInfo" class="tax-highlight" style="display: none;">Taxable Income Above ₹12 LPA: <span class="value" id="taxableIncome"></span></p>
-      <p>Estimated Monthly Take-Home: <span class="value" id="takeHome"></span></p>
-      <p class="note"><small>* Assuming zero income tax (for annual income up to ₹12LPA)</small></p>
-    </div>
-  </div>
+<!-- INTEREST -->
+<section class="panel" id="interest">
+<div class="grid"><div>
+<div class="field"><div class="head"><span class="label">Principal amount</span><span class="value" id="intV">₹2,00,000</span></div><input id="intAmt" type="range" min="1000" max="10000000" step="1000" value="200000"></div>
+<div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="intRateV">10%</span></div><input id="intRate" type="range" min="0" max="50" step=".1" value="10"></div>
+<div class="field"><div class="head"><span class="label">Time period</span><span class="value" id="intTimeV">3 Yrs</span></div><input id="intTime" type="range" min="1" max="30" value="3"></div>
+<div class="field"><div class="head"><span class="label">Calculation type</span><span class="value">Selected</span></div><select class="select-input" id="intType"><option value="simple">Simple Interest</option><option value="compound">Compound Interest</option></select></div>
+</div><div>
+<div class="hero"><div class="small">Total amount</div><div class="big" id="intTotal">₹2,60,000</div></div>
+<div class="rows"><div class="row"><span>Principal</span><strong id="intPrincipal">₹2,00,000</strong></div><div class="row"><span>Interest earned</span><strong id="intInterest">₹60,000</strong></div><div class="row"><span>Total amount</span><strong id="intAmount">₹2,60,000</strong></div></div>
+<div class="note">Simple interest uses P×R×T. Compound interest compounds annually for this calculator.</div>
+</div></div>
+</section>
 
-  <script>
-    function calculateTakeHome() {
-      const gross = parseFloat(document.getElementById('gross').value);
-      const basicPercentage = parseFloat(document.getElementById('basicPercentage').value) / 100;
-      const pfPercentage = parseFloat(document.getElementById('pfPercentage').value) / 100;
+<!-- GST -->
+<section class="panel" id="gst">
+<div class="grid"><div>
+<div class="field"><div class="head"><span class="label">Amount</span><span class="value" id="gstV">₹1,00,000</span></div><input id="gstAmt" type="range" min="100" max="10000000" step="100" value="100000"></div>
+<div class="field"><div class="head"><span class="label">GST rate</span><span class="value" id="gstRateV">18%</span></div><input id="gstRate" type="range" min="0" max="28" step=".5" value="18"><div class="range-labels"><span>0%</span><span>28%</span></div></div>
+<div class="field"><div class="head"><span class="label">Amount mode</span><span class="value">Selected</span></div><select class="select-input" id="gstMode"><option value="exclusive">GST added to amount</option><option value="inclusive">GST already included</option></select></div>
+</div><div>
+<div class="hero"><div class="small">Final amount</div><div class="big" id="gstTotal">₹1,18,000</div></div>
+<div class="rows"><div class="row"><span>Base amount</span><strong id="gstBase">₹1,00,000</strong></div><div class="row"><span>GST amount</span><strong id="gstTax">₹18,000</strong></div><div class="row"><span>Final amount</span><strong id="gstFinal">₹1,18,000</strong></div></div>
+<div class="note">For GST-inclusive mode, the entered amount is treated as the final price and GST is extracted from it.</div>
+</div></div>
+</section>
+</div>
 
-      const deduction1 = parseFloat(document.getElementById('deduction1').value) || 0;
-      const deduction2 = parseFloat(document.getElementById('deduction2').value) || 0;
+<script>
+const $=id=>document.getElementById(id);
+const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+const money2=n=>"₹"+n.toLocaleString("en-IN",{maximumFractionDigits:0});
 
-      if (isNaN(gross) || gross <= 0 || isNaN(basicPercentage) || basicPercentage <= 0 || isNaN(pfPercentage) || pfPercentage <= 0) {
-        alert("Please enter valid values for salary, basic percentage, and PF percentage.");
-        return;
-      }
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+ btn.classList.add("active");$(btn.dataset.tab).classList.add("active");
+}));
 
-      // Calculate the Basic Salary and PF
-      const basicSalary = gross * basicPercentage;
-      const pf = basicSalary * pfPercentage;
+function loanTenureText(m){
+ if(m<12)return m+(m===1?" Month":" Months");
+ const y=Math.floor(m/12),r=m%12;
+ if(!r)return y+(y===1?" Yr":" Yrs");
+ return y+(y===1?" Yr ":" Yrs ")+r+(r===1?" Mo":" Mos");
+}
+function loanEMI(P,a,n){
+ const r=a/1200;
+ if(!r)return P/n;
+ const f=Math.pow(1+r,n);return P*r*f/(f-1);
+}
+let loanEMIEditing=false;
+function renderLoan(P,a,n,emi){
+ const total=emi*n,interest=Math.max(0,total-P),ip=total?P/total*100:100,rp=100-ip;
+ $("loanAmountV").textContent=money(P);
+ $("loanRateV").textContent=a+"%";
+ $("loanTenureV").textContent=loanTenureText(n);
+ $("loanMonths").textContent=n+" months";
+ $("loanPrincipal").textContent=money(P);
+ $("loanInterest").textContent=money(interest);
+ $("loanTotal").textContent=money(total);
+ $("loanEmi").value=Math.round(emi);
+ $("loanPayments").textContent=n+" monthly payments";
+ $("loanChart").style.setProperty("--p",rp+"%");
+ $("loanPP").textContent=Math.round(ip)+"%";
+ $("loanIP").textContent=Math.round(rp)+"%";
+}
+function calcLoanFromTenure(){
+ const P=+$("loanAmount").value,a=+$("loanRate").value,n=+$("loanTenure").value;
+ const emi=loanEMI(P,a,n);
+ $("loanError").textContent="";
+ renderLoan(P,a,n,emi);
+}
+function calcLoanFromEMI(){
+ const P=+$("loanAmount").value,a=+$("loanRate").value,target=+$("loanEmi").value,r=a/1200;
+ if(!target||target<=0){$("loanError").textContent="Enter a valid EMI.";return}
+ let n;
+ if(!r){
+   n=Math.ceil(P/target);
+ }else{
+   if(target<=P*r){
+     $("loanError").textContent="EMI must be higher than the monthly interest.";
+     return;
+   }
+   n=Math.ceil(-Math.log(1-P*r/target)/Math.log(1+r));
+ }
+ if(n>360){
+   $("loanError").textContent="Required tenure exceeds the 30-year limit.";
+   n=360;
+ }else{
+   $("loanError").textContent="";
+ }
+ $("loanTenure").value=n;
+ renderLoan(P,a,n,loanEMI(P,a,n));
+}
+$("loanAmount").addEventListener("input",calcLoanFromTenure);
+$("loanRate").addEventListener("input",calcLoanFromTenure);
+$("loanTenure").addEventListener("input",calcLoanFromTenure);
+$("loanEmi").addEventListener("input",calcLoanFromEMI);
+calcLoanFromTenure();
 
-      // Calculate the annual gross salary
-      const annualGross = gross * 12;
+function calcCTC(){
+ const c=+$("ctc").value,pf=+$("pf").value,pt=+$("pt").value,tax=+$("tax").value;
+ const annualPF=pf*12,annualPT=pt*12,net=c-annualPF-annualPT-tax;
+ $("ctcV").textContent=money(c);$("pfV").textContent=money(pf)+"/mo";$("ptV").textContent=money(pt)+"/mo";$("taxV").textContent=money(tax);
+ $("ctcAnnual").textContent=money(c);$("grossMonthly").textContent=money(c/12);$("pfAnnual").textContent=money(annualPF);$("ptAnnual").textContent=money(annualPT);$("taxAnnual").textContent=money(tax);
+ $("netAnnual").textContent=money(Math.max(0,net));$("netHome").textContent=money(Math.max(0,net/12));
+}
+["ctc","pf","pt","tax"].forEach(x=>$(x).addEventListener("input",calcCTC));calcCTC();
 
-      // Apply tax exemption for income up to ₹12LPA
-      let tax = 0;
-      let taxableIncome = 0;
-      if (annualGross > 1200000) {
-        taxableIncome = annualGross - 1200000;
-        tax = taxableIncome * 0.05;  // Simple flat tax rate above ₹12LPA (adjust as per your tax regime)
-      }
+function calcSIP(){
+ const p=+$("sipAmt").value,r=+$("sipRate").value/1200,n=+$("sipTenure").value*12;
+ const total=r? p*((Math.pow(1+r,n)-1)/r)*(1+r):p*n,invest=p*n,returns=total-invest,ip=total?invest/total*100:100;
+ $("sipV").textContent=money(p);$("sipRateV").textContent=$("sipRate").value+"%";$("sipTenureV").textContent=$("sipTenure").value+" Yrs";
+ $("sipTotal").textContent=money(total);$("sipInvested").textContent=money(invest);$("sipReturns").textContent=money(returns);$("sipValue").textContent=money(total);
+ $("sipChart").style.setProperty("--p",(100-ip)+"%");$("sipIP").textContent=Math.round(ip)+"%";$("sipRP").textContent=Math.round(100-ip)+"%";
+}
+["sipAmt","sipRate","sipTenure"].forEach(x=>$(x).addEventListener("input",calcSIP));calcSIP();
 
-      // Total deductions (PF + other deductions)
-      const totalDeductions = pf + deduction1 + deduction2;
-      
-      // Calculate the take-home salary (gross minus PF, tax, and additional deductions)
-      const takeHome = gross - totalDeductions - (tax / 12);  // Dividing tax by 12 to get the monthly tax deduction
+function calcFD(){
+ const P=+$("fdAmt").value,a=+$("fdRate").value/100,n=+$("fdTenure").value,f=+$("fdFreq").value;
+ const total=P*Math.pow(1+a/f,f*n),interest=total-P;
+ $("fdV").textContent=money(P);$("fdRateV").textContent=$("fdRate").value+"%";$("fdTenureV").textContent=$("fdTenure").value+" Yrs";
+ $("fdTotal").textContent=money(total);$("fdPrincipal").textContent=money(P);$("fdInterest").textContent=money(interest);$("fdMaturity").textContent=money(total);
+}
+["fdAmt","fdRate","fdTenure","fdFreq"].forEach(x=>$(x).addEventListener("input",calcFD));calcFD();
 
-      // Display the results
-      document.getElementById('annualGross').innerText = `₹${annualGross.toLocaleString()}`;
-      document.getElementById('basicSalary').innerText = `₹${basicSalary.toFixed(2)}`;
-      document.getElementById('pf').innerText = `₹${pf.toFixed(2)}`;
-      document.getElementById('totalDeductions').innerText = `₹${totalDeductions.toFixed(2)}`;
-      document.getElementById('takeHome').innerText = `₹${takeHome.toFixed(2)}`;
+function calcInterest(){
+ const P=+$("intAmt").value,a=+$("intRate").value/100,t=+$("intTime").value;
+ let total;
+ if($("intType").value==="simple")total=P*(1+a*t);else total=P*Math.pow(1+a,t);
+ const interest=total-P;
+ $("intV").textContent=money(P);$("intRateV").textContent=$("intRate").value+"%";$("intTimeV").textContent=t+(t===1?" Yr":" Yrs");
+ $("intTotal").textContent=money(total);$("intPrincipal").textContent=money(P);$("intInterest").textContent=money(interest);$("intAmount").textContent=money(total);
+}
+["intAmt","intRate","intTime","intType"].forEach(x=>$(x).addEventListener("input",calcInterest));calcInterest();
 
-      // Highlight taxable income if applicable
-      if (taxableIncome > 0) {
-        document.getElementById('taxableIncome').innerText = `₹${taxableIncome.toLocaleString()}`;
-        document.getElementById('taxInfo').style.display = 'block';
-      } else {
-        document.getElementById('taxInfo').style.display = 'none';
-      }
-
-      document.getElementById('result').style.display = 'block';
-    }
-  </script>
-
+function calcGST(){
+ const x=+$("gstAmt").value,r=+$("gstRate").value/100,inclusive=$("gstMode").value==="inclusive";
+ let base,tax,total;
+ if(inclusive){total=x;base=x/(1+r);tax=total-base}else{base=x;tax=x*r;total=x+tax}
+ $("gstV").textContent=money(x);$("gstRateV").textContent=$("gstRate").value+"%";
+ $("gstTotal").textContent=money(total);$("gstBase").textContent=money(base);$("gstTax").textContent=money(tax);$("gstFinal").textContent=money(total);
+}
+["gstAmt","gstRate","gstMode"].forEach(x=>$(x).addEventListener("input",calcGST));calcGST();
+</script>
 </body>
 </html>
