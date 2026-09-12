@@ -112,7 +112,13 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 }
 <style>
 .fee-table{margin:18px 0 14px;border:1px solid #e4e9f4;border-radius:13px;overflow:hidden;background:#fff}.fee-title{padding:11px 14px;font-size:13px;font-weight:800;color:#253858;background:#f6f8fc;border-bottom:1px solid #e7ebf3}.fee-row{display:grid;grid-template-columns:1fr 150px;align-items:center;min-height:48px;padding:7px 14px;border-bottom:1px solid #edf0f5;gap:18px}.fee-row:last-child{border-bottom:0}.fee-row label{font-size:13px;color:#53627b}.fee-input{display:flex;align-items:center;border:1px solid #dce2ee;border-radius:9px;background:#fbfcfe;height:36px;overflow:hidden}.fee-input span{padding-left:10px;color:#74819a;font-size:13px}.fee-input input{width:100%;border:0;outline:0;background:transparent;padding:7px 9px 7px 5px;text-align:right;color:#253858;font:inherit}.standard-select{display:grid;grid-template-columns:1fr 250px;gap:18px;align-items:center;margin:14px 0 18px}.standard-select label{font-size:13px;font-weight:700;color:#53627b}.standard-select select{width:100%;height:40px;padding:0 12px;border:1px solid #dce2ee;border-radius:9px;background:#fff;color:#253858;font:inherit;outline:none}@media(max-width:700px){.fee-row,.standard-select{grid-template-columns:1fr}.fee-row{gap:7px}.standard-select{gap:8px}}
-</style>
+
+.loan-report-start-trigger{height:30px;padding:0 9px;border:1px solid #d8deea;border-radius:7px;background:#fff;color:#536078;font:inherit;font-size:11px;cursor:pointer}
+.loan-report-start-trigger:hover{background:#f7f9fc}
+.loan-report-start-picker{display:inline-flex;align-items:center}
+#loanReportStartDate{height:30px;padding:4px 8px;border:1px solid #cfd6e4;border-radius:7px;background:#fff;color:#202938;font:inherit;font-size:11px}
+@media(max-width:700px){.loan-report-actions{flex-wrap:wrap}}
+.loan-report-month-name{font-size:9px;color:#8a94a6;font-weight:500}</style>
 </style>
 
 <style>
@@ -391,6 +397,118 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 }
 .loan-report-disclaimer{
   margin-top:7px;
+}
+</style>
+
+
+<style>
+#ctc .field:has(#otherDed){
+  padding-top:2px;
+}
+#ctc .field:has(#otherDed) .label{
+  color:#33435f;
+}
+</style>
+
+
+<style>
+/* Professional Net Home calculator controls */
+#ctc .field{
+  margin-bottom:24px;
+}
+#ctc .field .head{
+  margin-bottom:8px;
+}
+#ctc .other-deduction-field{
+  margin-top:2px;
+}
+#ctc .input-with-slider{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 122px;
+  gap:12px;
+  align-items:center;
+}
+#ctc .direct-money{
+  height:38px;
+  display:flex;
+  align-items:center;
+  border:1px solid #dbe3ef;
+  border-radius:8px;
+  background:#fff;
+  overflow:hidden;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+#ctc .direct-money:focus-within{
+  border-color:#9db0d2;
+  box-shadow:0 0 0 3px rgba(83,109,254,.08);
+}
+#ctc .direct-money span{
+  padding-left:10px;
+  color:#65738a;
+  font-size:12px;
+}
+#ctc #otherDedInput{
+  width:100%;
+  height:100%;
+  border:0;
+  outline:0;
+  padding:0 9px 0 5px;
+  text-align:right;
+  color:#253858;
+  background:transparent;
+  font:600 12px inherit;
+}
+#ctc .other-deduction-help{
+  margin-top:7px;
+  color:#8a95a7;
+  line-height:1.45;
+}
+#ctc .range-labels{
+  margin-top:5px;
+}
+#ctc .rows .row strong{
+  font-variant-numeric:tabular-nums;
+}
+#ctc .hero{
+  min-height:118px;
+}
+@media(max-width:700px){
+  #ctc .input-with-slider{
+    grid-template-columns:minmax(0,1fr) 112px;
+    gap:8px;
+  }
+}
+@media(max-width:420px){
+  #ctc .input-with-slider{
+    grid-template-columns:1fr;
+  }
+  #ctc .direct-money{
+    width:100%;
+  }
+}
+</style>
+
+
+<style>
+/* Net Home: explicit deduction periods */
+#ctc .label em{
+  font-style:normal;
+  font-size:10px;
+  font-weight:600;
+  color:#8a95a7;
+  margin-left:3px;
+}
+#ctc .other-deduction-help{
+  max-width:620px;
+}
+#ctc .rows .row:first-child{
+  margin-top:2px;
+}
+#ctc .rows .row strong{
+  font-variant-numeric:tabular-nums;
+}
+#ctc .note{
+  line-height:1.55;
 }
 </style>
 
@@ -776,9 +894,18 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <section class="panel active" id="loan">
 <div class="grid">
   <div class="loan-left">
-    <div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
-    <div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"><div class="range-labels"><span>0%</span><span>30%</span></div></div>
-    <div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><input id="loanTenure" type="range" min="1" max="360" value="36"><div class="range-labels"><span>1 month</span><span>30 years</span></div></div>
+    <div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"></div>
+  <div class="manual-value-wrap"><input id="manual_loanAmount" type="number" min="10000" max="10000000" step="10000" value="200000" inputmode="decimal" aria-label="Manual value for loanAmount"></div>
+</div><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
+    <div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"></div>
+  <div class="manual-value-wrap"><input id="manual_loanRate" type="number" min="0" max="30" step=".1" value="13" inputmode="decimal" aria-label="Manual value for loanRate"></div>
+</div><div class="range-labels"><span>0%</span><span>30%</span></div></div>
+    <div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="loanTenure" type="range" min="1" max="360" value="36"></div>
+  <div class="manual-value-wrap"><input id="manual_loanTenure" type="number" min="1" max="360" step="1" value="36" inputmode="decimal" aria-label="Manual value for loanTenure"></div>
+</div><div class="range-labels"><span>1 month</span><span>30 years</span></div></div>
 
     <div class="fee-table">
       <div class="fee-title">Additional Charges</div>
@@ -859,9 +986,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
     <div style="margin:22px 0 4px"><div style="height:8px;border-radius:20px;background:#edf0f6;overflow:hidden"><div id="loanProgress" style="height:100%;width:72%;background:linear-gradient(90deg,#00a878,#536dfe);border-radius:20px;transition:width .45s ease"></div></div></div>
     <div class="loan-report-actions">
       <button type="button" class="loan-report-btn" id="loanReportBtn">↓&nbsp; Download PDF Report</button>
-      <span class="loan-report-hint">Detailed repayment proposal</span>
+      <button type="button" class="loan-report-start-trigger" id="loanReportStartTrigger" aria-expanded="false">Start date</button>
+      <div class="loan-report-start-picker" id="loanReportStartPicker" hidden>
+        <input type="date" id="loanReportStartDate" aria-label="Repayment start date">
+      </div>
     </div>
-    <div class="rows"><div class="row"><span>Processing Fee</span><b id="processingOut">₹0</b></div><div class="row"><span>GST</span><b id="feeGSTOut">₹0</b></div><div class="row"><span>Other Charges</span><b id="otherOut">₹0</b></div><div class="row"><span>Additional Charges</span><b id="chargesOut">₹0</b></div><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span id="loanInterestLabel">Total reducing interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span id="loanTotalLabel">Total repayment with interest</span><strong id="loanTotal">₹2,78,000</strong></div></div>
+    <div class="rows"><div class="row"><span>Processing Fee</span><b id="processingOut">₹0</b></div><div class="row"><span>GST</span><b id="feeGSTOut">₹0</b></div><div class="row"><span>Other Charges</span><b id="otherOut">₹0</b></div><div class="row"><span>Additional Charges</span><b id="chargesOut">₹0</b></div><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span id="loanInterestLabel">Total Normal / Reducing interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span id="loanTotalLabel">Total repayment</span><strong id="loanTotal">₹2,78,000</strong></div></div>
   </div>
 </div>
 
@@ -887,27 +1017,62 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <!-- CTC -->
 <section class="panel" id="ctc">
 <div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Annual CTC</span><span class="value" id="ctcV">₹2,00,000</span></div><input id="ctcInput" type="range" min="100000" max="10000000" step="10000" value="200000"><div class="range-labels"><span>₹1L</span><span>₹1 Cr</span></div></div>
-<div class="field"><div class="head"><span class="label">Employee PF</span><span class="value" id="pfV">₹1,800/mo</span></div><input id="pf" type="range" min="0" max="25000" step="100" value="1800"><div class="range-labels"><span>₹0</span><span>₹25K/mo</span></div></div>
-<div class="field"><div class="head"><span class="label">Professional tax</span><span class="value" id="ptV">₹200/mo</span></div><input id="pt" type="range" min="0" max="500" step="50" value="200"></div>
-<div class="field"><div class="head"><span class="label">Income tax estimate</span><span class="value" id="taxV">₹0</span></div><input id="tax" type="range" min="0" max="300000" step="5000" value="0"><div class="small" style="margin-top:7px">Enter your estimated annual income-tax deduction. This calculator does not assume a tax regime.</div></div>
+<div class="field"><div class="head"><span class="label">Annual CTC</span><span class="value" id="ctcV">₹2,00,000</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="ctcInput" type="range" min="100000" max="10000000" step="10000" value="200000"></div>
+  <div class="manual-value-wrap"><input id="manual_ctcInput" type="number" min="100000" max="10000000" step="10000" value="200000" inputmode="decimal" aria-label="Manual value for ctcInput"></div>
+</div><div class="range-labels"><span>₹1L</span><span>₹1 Cr</span></div></div>
+<div class="field"><div class="head"><span class="label">Employee PF <em>(monthly)</em></span><span class="value" id="pfV">₹1,800/mo</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="pf" type="range" min="0" max="25000" step="100" value="1800"></div>
+  <div class="manual-value-wrap"><input id="manual_pf" type="number" min="0" max="25000" step="100" value="1800" inputmode="decimal" aria-label="Manual value for pf"></div>
+</div><div class="range-labels"><span>₹0/mo</span><span>₹25K/mo</span></div></div>
+<div class="field"><div class="head"><span class="label">Professional tax <em>(monthly)</em></span><span class="value" id="ptV">₹200/mo</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="pt" type="range" min="0" max="500" step="50" value="200"></div>
+  <div class="manual-value-wrap"><input id="manual_pt" type="number" min="0" max="500" step="50" value="200" inputmode="decimal" aria-label="Manual value for pt"></div>
+</div><div class="range-labels"><span>₹0/mo</span><span>₹500/mo</span></div></div>
+<div class="field"><div class="head"><span class="label">Income tax estimate <em>(monthly)</em></span><span class="value" id="taxV">₹0/mo</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="tax" type="range" min="0" max="25000" step="100" value="0"></div>
+  <div class="manual-value-wrap"><input id="manual_tax" type="number" min="0" max="25000" step="100" value="0" inputmode="decimal" aria-label="Manual value for tax"></div>
+</div><div class="range-labels"><span>₹0/mo</span><span>₹25K/mo</span></div><div class="small" style="margin-top:7px">Enter your estimated monthly income-tax deduction. This calculator does not assume a tax regime.</div></div><div class="field other-deduction-field">
+  <div class="head">
+    <span class="label">Other Deductions <em>(monthly)</em></span>
+    <span class="value" id="otherDedV">₹0/mo</span>
+  </div>
+  <div class="input-with-slider">
+    <input id="otherDed" type="range" min="0" max="1000000" step="100" value="0" aria-label="Other deductions slider">
+    <div class="direct-money">
+      <span>₹</span>
+      <input id="otherDedInput" type="number" min="0" step="100" value="0" inputmode="numeric" aria-label="Other deductions amount per month">
+    </div>
+  </div>
+  <div class="range-labels"><span>₹0/mo</span><span>₹10L+/mo</span></div>
+  <div class="small other-deduction-help">Enter the monthly amount directly or use the slider. No fixed deduction limit is applied to direct entry.</div>
+</div>
 </div><div>
 <div class="hero"><div class="small">Estimated monthly take-home</div><div class="big" id="netHome">₹14,667</div></div>
 <div class="chart" id="ctcChart" style="--p:98%;--chart1:#e4e9f7;--chart2:#00a878">
   <div class="chart-inner"><div class="chart-title">Take-home</div><div class="chart-sub">after entered deductions</div></div>
 </div>
 <div class="legend"><span><i class="dot d1"></i>Deductions: <b id="ctcDP">2%</b></span><span><i class="dot" style="background:#00a878"></i>Take-home: <b id="ctcNP">98%</b></span></div>
-<div class="rows"><div class="row"><span>Annual CTC</span><strong id="ctcAnnual">₹2,00,000</strong></div><div class="row"><span>Monthly gross</span><strong id="grossMonthly">₹16,667</strong></div><div class="row"><span>Annual employee PF</span><strong id="pfAnnual">₹21,600</strong></div><div class="row"><span>Annual professional tax</span><strong id="ptAnnual">₹2,400</strong></div><div class="row"><span>Annual income tax</span><strong id="taxAnnual">₹0</strong></div><div class="row"><span>Estimated annual take-home</span><strong id="netAnnual">₹1,76,000</strong></div></div>
-<div class="note">CTC structures differ between employers. This is an estimate based only on the deductions you enter; it does not calculate employer PF, gratuity, bonus, stock, or income tax rules automatically.</div>
+<div class="rows"><div class="row"><span>Annual CTC</span><strong id="ctcAnnual">₹2,00,000</strong></div><div class="row"><span>Monthly gross</span><strong id="grossMonthly">₹16,667</strong></div><div class="row"><span>Monthly employee PF</span><strong id="pfAnnual">₹21,600</strong></div><div class="row"><span>Monthly professional tax</span><strong id="ptAnnual">₹2,400</strong></div><div class="row"><span>Monthly income tax</span><strong id="taxAnnual">₹0</strong></div><div class="row"><span>Monthly other deductions</span><strong id="otherDedAnnual">₹0</strong></div><div class="row"><span>Estimated annual take-home</span><strong id="netAnnual">₹1,76,000</strong></div></div>
+<div class="note">CTC structures differ between employers. Employee PF, Professional Tax, Income Tax and Other Deductions are entered monthly. Values are editable assumptions and may vary by employer, salary structure, state and tax regime. Employer PF, gratuity, bonus, stock and other CTC components are not calculated automatically.</div>
 </div></div>
 </section>
 
 <!-- SIP -->
 <section class="panel" id="sip">
 <div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Monthly investment</span><span class="value" id="sipV">₹10,000</span></div><input id="sipAmt" type="range" min="500" max="500000" step="500" value="10000"><div class="range-labels"><span>₹500</span><span>₹5L</span></div></div>
-<div class="field"><div class="head"><span class="label">Expected return (p.a.)</span><span class="value" id="sipRateV">12%</span></div><input id="sipRate" type="range" min="0" max="30" step=".1" value="12"></div>
-<div class="field"><div class="head"><span class="label">Investment period</span><span class="value" id="sipTenureV">10 Yrs</span></div><input id="sipTenure" type="range" min="1" max="40" value="10"><div class="range-labels"><span>1 year</span><span>40 years</span></div></div>
+<div class="field"><div class="head"><span class="label">Monthly investment</span><span class="value" id="sipV">₹10,000</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="sipAmt" type="range" min="500" max="500000" step="500" value="10000"></div>
+  <div class="manual-value-wrap"><input id="manual_sipAmt" type="number" min="500" max="500000" step="500" value="10000" inputmode="decimal" aria-label="Manual value for sipAmt"></div>
+</div><div class="range-labels"><span>₹500</span><span>₹5L</span></div></div>
+<div class="field"><div class="head"><span class="label">Expected return (p.a.)</span><span class="value" id="sipRateV">12%</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="sipRate" type="range" min="0" max="30" step=".1" value="12"></div>
+  <div class="manual-value-wrap"><input id="manual_sipRate" type="number" min="0" max="30" step=".1" value="12" inputmode="decimal" aria-label="Manual value for sipRate"></div>
+</div></div>
+<div class="field"><div class="head"><span class="label">Investment period</span><span class="value" id="sipTenureV">10 Yrs</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="sipTenure" type="range" min="1" max="40" value="10"></div>
+  <div class="manual-value-wrap"><input id="manual_sipTenure" type="number" min="1" max="40" step="1" value="10" inputmode="decimal" aria-label="Manual value for sipTenure"></div>
+</div><div class="range-labels"><span>1 year</span><span>40 years</span></div></div>
 </div><div>
 <div class="hero"><div class="small">Estimated maturity value</div><div class="big" id="sipTotal">₹23,23,391</div></div>
 <div class="chart" id="sipChart" style="--p:50%;--chart1:#dfe6f5;--chart2:#536dfe"><div class="chart-inner"><div class="chart-title">SIP Value</div><div class="chart-sub">Invested + returns</div></div></div>
@@ -920,9 +1085,18 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <!-- FD -->
 <section class="panel" id="fd">
 <div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Deposit amount</span><span class="value" id="fdV">₹2,00,000</span></div><input id="fdAmt" type="range" min="10000" max="10000000" step="10000" value="200000"></div>
-<div class="field"><div class="head"><span class="label">Interest rate (p.a.)</span><span class="value" id="fdRateV">7%</span></div><input id="fdRate" type="range" min="1" max="15" step=".1" value="7"></div>
-<div class="field"><div class="head"><span class="label">Tenure</span><span class="value" id="fdTenureV">5 Yrs</span></div><input id="fdTenure" type="range" min="1" max="10" step=".5" value="5"></div>
+<div class="field"><div class="head"><span class="label">Deposit amount</span><span class="value" id="fdV">₹2,00,000</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="fdAmt" type="range" min="10000" max="10000000" step="10000" value="200000"></div>
+  <div class="manual-value-wrap"><input id="manual_fdAmt" type="number" min="10000" max="10000000" step="10000" value="200000" inputmode="decimal" aria-label="Manual value for fdAmt"></div>
+</div></div>
+<div class="field"><div class="head"><span class="label">Interest rate (p.a.)</span><span class="value" id="fdRateV">7%</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="fdRate" type="range" min="1" max="15" step=".1" value="7"></div>
+  <div class="manual-value-wrap"><input id="manual_fdRate" type="number" min="1" max="15" step=".1" value="7" inputmode="decimal" aria-label="Manual value for fdRate"></div>
+</div></div>
+<div class="field"><div class="head"><span class="label">Tenure</span><span class="value" id="fdTenureV">5 Yrs</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="fdTenure" type="range" min="1" max="10" step=".5" value="5"></div>
+  <div class="manual-value-wrap"><input id="manual_fdTenure" type="number" min="1" max="10" step=".5" value="5" inputmode="decimal" aria-label="Manual value for fdTenure"></div>
+</div></div>
 <div class="field"><div class="head"><span class="label">Compounding</span><span class="value">Selected</span></div><select class="select-input" id="fdFreq"><option value="4">Quarterly</option><option value="12">Monthly</option><option value="2">Half-yearly</option><option value="1">Yearly</option></select></div>
 </div><div>
 <div class="hero"><div class="small">Maturity amount</div><div class="big" id="fdTotal">₹2,82,910</div></div>
@@ -934,9 +1108,18 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <!-- INTEREST -->
 <section class="panel" id="interest">
 <div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Principal amount</span><span class="value" id="intV">₹2,00,000</span></div><input id="intAmt" type="range" min="1000" max="10000000" step="1000" value="200000"></div>
-<div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="intRateV">10%</span></div><input id="intRate" type="range" min="0" max="50" step=".1" value="10"></div>
-<div class="field"><div class="head"><span class="label">Time period</span><span class="value" id="intTimeV">3 Yrs</span></div><input id="intTime" type="range" min="1" max="30" value="3"></div>
+<div class="field"><div class="head"><span class="label">Principal amount</span><span class="value" id="intV">₹2,00,000</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="intAmt" type="range" min="1000" max="10000000" step="1000" value="200000"></div>
+  <div class="manual-value-wrap"><input id="manual_intAmt" type="number" min="1000" max="10000000" step="1000" value="200000" inputmode="decimal" aria-label="Manual value for intAmt"></div>
+</div></div>
+<div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="intRateV">10%</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="intRate" type="range" min="0" max="50" step=".1" value="10"></div>
+  <div class="manual-value-wrap"><input id="manual_intRate" type="number" min="0" max="50" step=".1" value="10" inputmode="decimal" aria-label="Manual value for intRate"></div>
+</div></div>
+<div class="field"><div class="head"><span class="label">Time period</span><span class="value" id="intTimeV">3 Yrs</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="intTime" type="range" min="1" max="30" value="3"></div>
+  <div class="manual-value-wrap"><input id="manual_intTime" type="number" min="1" max="30" step="1" value="3" inputmode="decimal" aria-label="Manual value for intTime"></div>
+</div></div>
 <div class="field"><div class="head"><span class="label">Calculation type</span><span class="value">Selected</span></div><select class="select-input" id="intType"><option value="simple">Simple Interest</option><option value="compound">Compound Interest</option></select></div>
 </div><div>
 <div class="hero"><div class="small">Total amount</div><div class="big" id="intTotal">₹2,60,000</div></div>
@@ -948,8 +1131,14 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <!-- GST -->
 <section class="panel" id="gst">
 <div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Amount</span><span class="value" id="gstV">₹1,00,000</span></div><input id="gstAmt" type="range" min="100" max="10000000" step="100" value="100000"></div>
-<div class="field"><div class="head"><span class="label">GST rate</span><span class="value" id="gstRateV">18%</span></div><input id="gstRate" type="range" min="0" max="28" step=".5" value="18"><div class="range-labels"><span>0%</span><span>28%</span></div></div>
+<div class="field"><div class="head"><span class="label">Amount</span><span class="value" id="gstV">₹1,00,000</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="gstAmt" type="range" min="100" max="10000000" step="100" value="100000"></div>
+  <div class="manual-value-wrap"><input id="manual_gstAmt" type="number" min="100" max="10000000" step="100" value="100000" inputmode="decimal" aria-label="Manual value for gstAmt"></div>
+</div></div>
+<div class="field"><div class="head"><span class="label">GST rate</span><span class="value" id="gstRateV">18%</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="gstRate" type="range" min="0" max="28" step=".5" value="18"></div>
+  <div class="manual-value-wrap"><input id="manual_gstRate" type="number" min="0" max="28" step=".5" value="18" inputmode="decimal" aria-label="Manual value for gstRate"></div>
+</div><div class="range-labels"><span>0%</span><span>28%</span></div></div>
 <div class="field"><div class="head"><span class="label">Amount mode</span><span class="value">Selected</span></div><select class="select-input" id="gstMode"><option value="exclusive">GST added to amount</option><option value="inclusive">GST already included</option></select></div>
 </div><div>
 <div class="hero"><div class="small">Final amount</div><div class="big" id="gstTotal">₹1,18,000</div></div>
@@ -962,6 +1151,14 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <style>
 @keyframes valuePulse{0%{opacity:.55;transform:translateY(2px)}100%{opacity:1;transform:none}}
 .pulse{animation:valuePulse .22s ease}
+
+/* Manual entry for slider-controlled calculator inputs */
+.range-with-manual{display:flex;align-items:center;gap:10px;width:100%}
+.range-main{flex:1;min-width:0}
+.manual-value-wrap{flex:0 0 118px}
+.manual-value-wrap input{width:100%;height:34px;padding:6px 9px;border:1px solid #cfd6e4;border-radius:7px;background:#fff;color:#202938;font:inherit;font-size:12px;box-sizing:border-box;outline:none}
+.manual-value-wrap input:focus{border-color:#536dfe;box-shadow:0 0 0 2px rgba(83,109,254,.10)}
+@media(max-width:700px){.range-with-manual{gap:8px}.manual-value-wrap{flex-basis:105px}.manual-value-wrap input{height:32px}}
 </style>
 <script>
 const $=id=>document.getElementById(id);
@@ -1004,7 +1201,7 @@ function renderLoan(P,a,n,emi){
    interest=Math.max(0,calculatedEMI*n-P);
    $("loanNote").textContent="Reducing Balance: interest is calculated on the outstanding principal after each payment.";
    setText("loanInterestLabel","Total Normal / Reducing interest");
-   setText("loanTotalLabel","Total Normal / Reducing interest");
+   setText("loanTotalLabel","Total repayment");
  }
  const loanRepayment=P+interest, charges=processing+feeGST+otherCharges, grandTotal=loanRepayment+charges;
  const ip=loanRepayment?P/loanRepayment*100:100, rp=100-ip;
@@ -1036,16 +1233,27 @@ $("loanEmi").addEventListener("input",calcLoanFromEMI);
 calcLoanFromTenure();
 
 function calcCTC(){
- const c=+$("ctcInput").value,pf=+$("pf").value,pt=+$("pt").value,tax=+$("tax").value;
- const annualPF=pf*12,annualPT=pt*12,net=c-annualPF-annualPT-tax;
- $("ctcV").textContent=money(c);$("pfV").textContent=money(pf)+"/mo";$("ptV").textContent=money(pt)+"/mo";$("taxV").textContent=money(tax);
- $("ctcAnnual").textContent=money(c);$("grossMonthly").textContent=money(c/12);$("pfAnnual").textContent=money(annualPF);$("ptAnnual").textContent=money(annualPT);$("taxAnnual").textContent=money(tax);
+ const c=+$("ctcInput").value,pf=+$("pf").value,pt=+$("pt").value,tax=+$("tax").value,otherDed=Math.max(0,+$("otherDedInput").value||0);
+ const annualPF=pf*12,annualPT=pt*12,annualTax=tax*12,annualOtherDed=otherDed*12,net=c-annualPF-annualPT-annualTax-annualOtherDed;
+ $("ctcV").textContent=money(c);$("pfV").textContent=money(pf)+"/mo";$("ptV").textContent=money(pt)+"/mo";$("taxV").textContent=money(tax)+"/mo";$("otherDedV").textContent=money(otherDed)+"/mo";
+ $("ctcAnnual").textContent=money(c);$("grossMonthly").textContent=money(c/12);$("pfAnnual").textContent=money(pf);$("ptAnnual").textContent=money(pt);$("taxAnnual").textContent=money(tax);$("otherDedAnnual").textContent=money(otherDed);
  const safeNet=Math.max(0,net), deductions=Math.max(0,c-safeNet), netPct=c?safeNet/c*100:0, dedPct=100-netPct;
  $("netAnnual").textContent=money(safeNet);setText("netHome",money(safeNet/12));
  $("ctcChart").style.setProperty("--p",Math.max(0,Math.min(100,netPct))+"%");
  $("ctcDP").textContent=Math.round(dedPct)+"%";$("ctcNP").textContent=Math.round(netPct)+"%";
 }
-["ctcInput","pf","pt","tax"].forEach(x=>$(x).addEventListener("input",calcCTC));calcCTC();
+["ctcInput","pf","pt","tax"].forEach(x=>$(x).addEventListener("input",calcCTC));
+$("otherDed").addEventListener("input",()=>{
+  $("otherDedInput").value=$("otherDed").value;
+  calcCTC();
+});
+$("otherDedInput").addEventListener("input",()=>{
+  const v=Math.max(0,+$("otherDedInput").value||0);
+  $("otherDedInput").value=v;
+  $("otherDed").value=Math.min(1000000,v);
+  calcCTC();
+});
+calcCTC();
 
 function calcSIP(){
  const p=+$("sipAmt").value,r=+$("sipRate").value/1200,n=+$("sipTenure").value*12;
@@ -1124,12 +1332,26 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
     return {P,rate,n,processing,gst,other,standard,interest,emi,charges,repayment,total};
   }
 
+  function formatReportDate(date){
+    return date.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+  }
+
+  function getReportStartDate(){
+    const input=$("loanReportStartDate");
+    if(input && input.value){
+      const [y,m,day]=input.value.split("-").map(Number);
+      return new Date(y,m-1,day);
+    }
+    const now=new Date();
+    return new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  }
+
   function monthlySchedule(d){
-    let balance=d.P, r=d.rate/1200, rows="";
+    let balance=d.P, r=d.rate/1200, rows="", startDate=getReportStartDate();
     for(let month=1;month<=d.n;month++){
       let interest, principal, payment=d.emi;
       if(d.standard==="compound"){
-        interest=d.P*r;
+        interest=balance*r;
         principal=Math.min(balance,Math.max(0,payment-interest));
       }else{
         interest=Math.max(0,balance*r);
@@ -1140,13 +1362,15 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
         payment=principal+interest;
       }
       balance=Math.max(0,balance-principal);
-      rows+=`<tr><td>Month ${month}</td><td>${fmt(payment)}</td><td>${fmt(principal)}</td><td>${fmt(interest)}</td><td>${fmt(balance)}</td></tr>`;
+      const date=new Date(startDate.getFullYear(),startDate.getMonth()+month-1,startDate.getDate());
+      const monthName=date.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+      rows+=`<tr><td>Month ${month}<br><span class="loan-report-month-name">${monthName}</span></td><td>${fmt(payment)}</td><td>${fmt(principal)}</td><td>${fmt(interest)}</td><td>${fmt(balance)}</td></tr>`;
     }
     return rows;
   }
 
   function buildPreview(){
-    const d=getReportData(), date=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+    const d=getReportData(), date=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"}), startDate=getReportStartDate();
     const method=d.standard==="compound"?"Compound Interest":"Normal / Reducing Balance", ref="LR-"+Date.now().toString().slice(-8);
     preview.innerHTML=`
       <div class="loan-report-sheet">
@@ -1163,6 +1387,7 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
         <div class="loan-report-section">Repayment Summary</div>
         <table class="loan-report-table">
           <tr><td>Calculation standard</td><td>${method}</td></tr>
+          <tr><td>Repayment start date</td><td>${formatReportDate(startDate)}</td></tr>
           <tr><td>Principal amount</td><td>${fmt(d.P)}</td></tr>
           <tr><td>${method} interest</td><td>${fmt(d.interest)}</td></tr>
           <tr><td>Loan repayment</td><td>${fmt(d.repayment)}</td></tr>
@@ -1181,6 +1406,20 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
         <div class="loan-report-disclaimer">Verify final terms, charges and the repayment schedule with the lender before making a financial decision.</div>
       </div>`;
   }
+
+  $("loanReportStartDate")?.addEventListener("change",()=>{
+    const input=$("loanReportStartDate"), trigger=$("loanReportStartTrigger");
+    if(input?.value && trigger) trigger.textContent="Start date: "+formatReportDate(getReportStartDate());
+    if(modal.classList.contains("is-open")) buildPreview();
+  });
+
+  const reportStartTrigger=$("loanReportStartTrigger");
+  const reportStartPicker=$("loanReportStartPicker");
+  reportStartTrigger?.addEventListener("click",()=>{
+    const open=reportStartPicker.hidden;
+    reportStartPicker.hidden=!open;
+    reportStartTrigger.setAttribute("aria-expanded",String(open));
+  });
 
   btn.addEventListener("click",()=>{
     buildPreview(); modal.classList.add("is-open"); modal.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; document.documentElement.style.overflow="hidden"; preview.scrollTop=0;
@@ -1205,6 +1444,7 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
 
     const doc=new J({unit:"mm",format:"a4"});
     const date=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+    const startDate=getReportStartDate();
     const method=d.standard==="compound"?"Compound Interest":"Normal / Reducing Balance";
     const ref="LR-"+Date.now().toString().slice(-8);
     const M={l:16,r:194,top:16,bottom:281};
@@ -1261,6 +1501,7 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
     title("Repayment Details");
     const details=[
       ["Calculation standard",method],
+      ["Repayment start date",formatReportDate(startDate)],
       ["Principal amount",fmt(d.P)],
       [method+" interest",fmt(d.interest)],
       ["Loan repayment",fmt(d.repayment)],
@@ -1328,9 +1569,13 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
       }
 
       doc.setTextColor(48,65,89);doc.setFont("helvetica","normal");doc.setFontSize(7);
+      const scheduleDate=new Date(startDate.getFullYear(),startDate.getMonth()+month-1,startDate.getDate());
+      const monthName=scheduleDate.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
       const vals=["Month "+month,fmt(payment),fmt(principal),fmt(interest),fmt(balance)];
       const xs=[M.l+2,75,110,148,192];
       vals.forEach((v,i)=>doc.text(v,xs[i],y,{align:i===0?"left":"right"}));
+      doc.setTextColor(125,135,150);doc.setFont("helvetica","normal");doc.setFontSize(5.5);
+      doc.text(monthName,M.l+2,y+3.2);
       doc.setDrawColor(239,242,246);doc.setLineWidth(.2);doc.line(M.l,y+2,M.r,y+2);
       y+=5.2;
     }
@@ -1356,6 +1601,36 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
     doc.save("loan-repayment-proposal-"+ref+".pdf");
   });
 })();
+
+// Keep every slider and its manual number field synchronized. Manual entry is
+// clamped to the same limits as the slider and then the existing calculator
+// input handler is triggered, so calculations update immediately.
+const sliderManualPairs=['loanAmount','loanRate','loanTenure','ctcInput','pf','pt','tax','sipAmt','sipRate','sipTenure','fdAmt','fdRate','fdTenure','intAmt','intRate','intTime','gstAmt','gstRate'];
+sliderManualPairs.forEach(id=>{
+  const slider=$(id), manual=$("manual_"+id);
+  if(!slider||!manual)return;
+  manual.value=slider.value;
+  slider.addEventListener("input",()=>{manual.value=slider.value;});
+  manual.addEventListener("input",()=>{
+    let v=parseFloat(manual.value);
+    if(!Number.isFinite(v))return;
+    const min=parseFloat(slider.min), max=parseFloat(slider.max), step=parseFloat(slider.step)||1;
+    if(Number.isFinite(min))v=Math.max(min,v);
+    if(Number.isFinite(max))v=Math.min(max,v);
+    if(step>0 && Number.isFinite(min)){
+      v=min+Math.round((v-min)/step)*step;
+      const decimals=(String(step).split('.')[1]||'').length;
+      v=Number(v.toFixed(decimals));
+    }
+    manual.value=v;
+    if(String(slider.value)!==String(v))slider.value=v;
+    slider.dispatchEvent(new Event("input",{bubbles:true}));
+  });
+  manual.addEventListener("blur",()=>{
+    if(manual.value===""){manual.value=slider.value;return;}
+    manual.dispatchEvent(new Event("input",{bubbles:true}));
+  });
+});
 </script>
 
 </body>
