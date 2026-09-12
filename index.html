@@ -114,6 +114,286 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 .fee-table{margin:18px 0 14px;border:1px solid #e4e9f4;border-radius:13px;overflow:hidden;background:#fff}.fee-title{padding:11px 14px;font-size:13px;font-weight:800;color:#253858;background:#f6f8fc;border-bottom:1px solid #e7ebf3}.fee-row{display:grid;grid-template-columns:1fr 150px;align-items:center;min-height:48px;padding:7px 14px;border-bottom:1px solid #edf0f5;gap:18px}.fee-row:last-child{border-bottom:0}.fee-row label{font-size:13px;color:#53627b}.fee-input{display:flex;align-items:center;border:1px solid #dce2ee;border-radius:9px;background:#fbfcfe;height:36px;overflow:hidden}.fee-input span{padding-left:10px;color:#74819a;font-size:13px}.fee-input input{width:100%;border:0;outline:0;background:transparent;padding:7px 9px 7px 5px;text-align:right;color:#253858;font:inherit}.standard-select{display:grid;grid-template-columns:1fr 250px;gap:18px;align-items:center;margin:14px 0 18px}.standard-select label{font-size:13px;font-weight:700;color:#53627b}.standard-select select{width:100%;height:40px;padding:0 12px;border:1px solid #dce2ee;border-radius:9px;background:#fff;color:#253858;font:inherit;outline:none}@media(max-width:700px){.fee-row,.standard-select{grid-template-columns:1fr}.fee-row{gap:7px}.standard-select{gap:8px}}
 </style>
 </style>
+
+<style>
+/* Loan report */
+#loan .loan-report-actions{
+  display:flex;align-items:center;gap:9px;margin:17px 0 10px;flex-wrap:wrap;
+}
+#loan .loan-report-btn{
+  border:1px solid #d8e1ef;background:#fff;color:#253858;border-radius:8px;
+  padding:8px 12px;font:600 11px inherit;cursor:pointer;
+}
+#loan .loan-report-btn:hover{background:#f7f9fc;border-color:#b9c9e4}
+#loan .loan-report-hint{font-size:10px;color:#8a95a7}
+
+.loan-report-modal{position:fixed;inset:0;z-index:1000;display:none}
+.loan-report-modal.is-open{display:block}
+.loan-report-overlay{position:absolute;inset:0;background:rgba(23,32,51,.48);backdrop-filter:blur(3px)}
+.loan-report-dialog{
+  position:relative;width:min(720px,calc(100% - 28px));max-height:calc(100vh - 40px);
+  margin:20px auto;background:#fff;border-radius:15px;overflow:hidden;
+  box-shadow:0 24px 70px rgba(23,32,51,.25);display:flex;flex-direction:column;
+}
+.loan-report-dialog-head{
+  padding:15px 19px;display:flex;justify-content:space-between;align-items:center;
+  border-bottom:1px solid #e7ebf2;
+}
+.loan-report-kicker{color:#536dfe;font-size:9px;font-weight:800;letter-spacing:1px}
+.loan-report-dialog-title{margin-top:3px;color:#253858;font-size:16px;font-weight:800}
+.loan-report-close{
+  width:30px;height:30px;border:0;border-radius:8px;background:#f4f6fa;
+  color:#66748b;font-size:20px;cursor:pointer;
+}
+.loan-report-preview{overflow:auto;padding:18px;background:#f6f8fc}
+.loan-report-dialog-foot{
+  display:flex;justify-content:flex-end;gap:8px;padding:12px 19px;
+  border-top:1px solid #e7ebf2;background:#fff;
+}
+.loan-report-cancel,.loan-report-download{
+  border-radius:8px;padding:8px 13px;font:600 11px inherit;cursor:pointer;
+}
+.loan-report-cancel{border:1px solid #dce2ee;background:#fff;color:#53627b}
+.loan-report-download{border:0;background:#536dfe;color:#fff}
+
+.loan-report-sheet{
+  max-width:650px;margin:0 auto;background:#fff;border:1px solid #e2e7f0;
+  border-radius:9px;padding:24px;box-shadow:0 7px 24px rgba(27,39,70,.06);color:#253858;
+}
+.loan-report-brand{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding-bottom:14px;border-bottom:2px solid #536dfe;
+}
+.loan-report-brand-title{font-size:18px;font-weight:800}
+.loan-report-brand-sub{font-size:9px;color:#7a869a;margin-top:3px}
+.loan-report-ref{text-align:right;font-size:8px;color:#7a869a;line-height:1.6}
+.loan-report-ref b{color:#536dfe}
+.loan-report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:14px 0}
+.loan-report-metric{padding:10px;background:#f7f9fc;border:1px solid #e7ebf2;border-radius:7px}
+.loan-report-metric-label{font-size:8px;color:#7a869a}
+.loan-report-metric-value{font-size:13px;font-weight:800;margin-top:3px}
+.loan-report-section{margin-top:15px;font-size:11px;font-weight:800;color:#253858}
+.loan-report-table{width:100%;border-collapse:collapse;font-size:9px;margin-top:7px}
+.loan-report-table th{
+  text-align:left;background:#f1f4ff;color:#53627b;font-size:8px;
+  padding:7px;border-bottom:1px solid #dfe5f0;
+}
+.loan-report-table td{padding:7px;border-bottom:1px solid #edf0f5}
+.loan-report-table td:not(:first-child),.loan-report-table th:not(:first-child){text-align:right}
+.loan-report-note{
+  margin-top:13px;padding:9px 10px;background:#fff9ed;border:1px solid #f1dfb6;
+  border-radius:7px;color:#725b2c;font-size:8px;line-height:1.5;
+}
+.loan-report-disclaimer{margin-top:10px;color:#8a95a7;font-size:7.5px;line-height:1.5}
+@media(max-width:600px){
+  .loan-report-summary{grid-template-columns:1fr 1fr}
+  .loan-report-sheet{padding:16px}
+}
+</style>
+
+
+<style>
+#loan .loan-report-table-wrap{
+  max-height:390px;
+  overflow:auto;
+  border:1px solid #e7ebf2;
+  border-radius:7px;
+}
+#loan .loan-report-table-wrap .loan-report-table{
+  margin-top:0;
+}
+#loan .loan-report-table-wrap .loan-report-table th{
+  position:sticky;
+  top:0;
+  z-index:1;
+}
+</style>
+
+
+<style>
+.loan-report-table-wrap{
+  width:100%;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.loan-report-table-wrap .loan-report-table{
+  min-width:560px;
+}
+</style>
+
+
+<style>
+/* Optimized responsive Loan Report */
+.loan-report-modal{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  padding:0;
+}
+.loan-report-dialog{
+  width:min(900px,calc(100vw - 32px));
+  height:min(94dvh,900px);
+  max-height:94dvh;
+  min-height:0;
+  margin:3dvh auto;
+  display:flex;
+  flex-direction:column;
+}
+.loan-report-dialog-head{
+  flex:0 0 auto;
+}
+.loan-report-preview{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+.loan-report-dialog-foot{
+  flex:0 0 auto;
+  position:relative;
+  z-index:5;
+}
+.loan-report-sheet{
+  width:100%;
+  max-width:760px;
+  box-sizing:border-box;
+  margin:0 auto;
+}
+.loan-report-table-wrap{
+  width:100%;
+  max-height:none !important;
+  overflow-x:auto;
+  overflow-y:visible !important;
+  -webkit-overflow-scrolling:touch;
+}
+.loan-report-table-wrap .loan-report-table{
+  min-width:560px;
+}
+
+/* Tablet */
+@media (max-width:900px){
+  .loan-report-dialog{
+    width:calc(100vw - 24px);
+    height:calc(100dvh - 24px);
+    max-height:calc(100dvh - 24px);
+    margin:12px auto;
+  }
+}
+
+/* Phone: true full-screen report, single vertical scroll area */
+@media (max-width:600px){
+  .loan-report-dialog{
+    width:100vw;
+    height:100dvh;
+    max-height:100dvh;
+    margin:0;
+    border-radius:0;
+  }
+  .loan-report-dialog-head{
+    padding:11px 13px;
+  }
+  .loan-report-dialog-title{
+    font-size:14px;
+  }
+  .loan-report-preview{
+    padding:8px;
+  }
+  .loan-report-sheet{
+    max-width:none;
+    padding:13px;
+    border-radius:8px;
+  }
+  .loan-report-brand{
+    gap:8px;
+  }
+  .loan-report-brand-title{
+    font-size:15px;
+  }
+  .loan-report-brand-sub{
+    font-size:8px;
+  }
+  .loan-report-ref{
+    font-size:7px;
+  }
+  .loan-report-summary{
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+  }
+  .loan-report-metric{
+    padding:8px;
+  }
+  .loan-report-metric-value{
+    font-size:12px;
+  }
+  .loan-report-section{
+    font-size:10px;
+  }
+  .loan-report-table-wrap{
+    overflow-x:auto;
+    overflow-y:visible !important;
+  }
+  .loan-report-table-wrap .loan-report-table{
+    min-width:520px;
+  }
+  .loan-report-dialog-foot{
+    padding:9px 10px;
+    gap:7px;
+  }
+  .loan-report-dialog-foot button{
+    min-height:38px;
+    padding:8px 13px;
+  }
+}
+
+/* Very small phones */
+@media (max-width:380px){
+  .loan-report-sheet{
+    padding:10px;
+  }
+  .loan-report-brand{
+    display:block;
+  }
+  .loan-report-ref{
+    margin-top:6px;
+    text-align:left;
+  }
+  .loan-report-table-wrap .loan-report-table{
+    min-width:500px;
+  }
+}
+</style>
+
+
+<style>
+/* Professional report preview spacing */
+.loan-report-sheet{
+  padding:20px;
+}
+.loan-report-summary{
+  margin:11px 0;
+}
+.loan-report-section{
+  margin-top:11px;
+}
+.loan-report-table{
+  margin-top:5px;
+}
+.loan-report-table th,
+.loan-report-table td{
+  padding:5px 7px;
+}
+.loan-report-note{
+  margin-top:10px;
+}
+.loan-report-disclaimer{
+  margin-top:7px;
+}
+</style>
+
 </head>
 <body>
 <div class="container">
@@ -577,7 +857,29 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
     <div class="chart" id="loanChart" style="--p:28%"><div class="chart-inner"><div class="chart-title">Total Cost</div><div class="chart-sub">Principal + interest</div></div></div>
     <div class="legend"><span><i class="dot d1"></i>Principal: <b id="loanPrincipalPct">72%</b></span><span><i class="dot d2"></i>Interest: <b id="loanInterestPct">28%</b></span></div>
     <div style="margin:22px 0 4px"><div style="height:8px;border-radius:20px;background:#edf0f6;overflow:hidden"><div id="loanProgress" style="height:100%;width:72%;background:linear-gradient(90deg,#00a878,#536dfe);border-radius:20px;transition:width .45s ease"></div></div></div>
+    <div class="loan-report-actions">
+      <button type="button" class="loan-report-btn" id="loanReportBtn">↓&nbsp; Download PDF Report</button>
+      <span class="loan-report-hint">Detailed repayment proposal</span>
+    </div>
     <div class="rows"><div class="row"><span>Processing Fee</span><b id="processingOut">₹0</b></div><div class="row"><span>GST</span><b id="feeGSTOut">₹0</b></div><div class="row"><span>Other Charges</span><b id="otherOut">₹0</b></div><div class="row"><span>Additional Charges</span><b id="chargesOut">₹0</b></div><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span id="loanInterestLabel">Total reducing interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span id="loanTotalLabel">Total repayment with interest</span><strong id="loanTotal">₹2,78,000</strong></div></div>
+  </div>
+</div>
+
+<div class="loan-report-modal" id="loanReportModal" aria-hidden="true">
+  <div class="loan-report-overlay" data-report-close></div>
+  <div class="loan-report-dialog" role="dialog" aria-modal="true" aria-labelledby="loanReportTitle">
+    <div class="loan-report-dialog-head">
+      <div>
+        <div class="loan-report-kicker">LOAN REPORT</div>
+        <div class="loan-report-dialog-title" id="loanReportTitle">Illustrative Loan Proposal</div>
+      </div>
+      <button type="button" class="loan-report-close" data-report-close aria-label="Close">×</button>
+    </div>
+    <div class="loan-report-preview" id="loanReportPreview"></div>
+    <div class="loan-report-dialog-foot">
+      <button type="button" class="loan-report-cancel" data-report-close>Close</button>
+      <button type="button" class="loan-report-download" id="loanReportDownload">Download PDF</button>
+    </div>
   </div>
 </div>
 </section>
@@ -797,5 +1099,264 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
   });
 }
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+  const btn=$("loanReportBtn"), modal=$("loanReportModal"), preview=$("loanReportPreview"), dl=$("loanReportDownload");
+  if(!btn||!modal||!preview||!dl)return;
+
+  const fmt=n=>"INR "+Math.round(n).toLocaleString("en-IN");
+
+  function getReportData(){
+    const P=Math.max(0,+$("loanAmount").value||0), rate=+$("loanRate").value||0, n=+$("loanTenure").value||1;
+    const processing=Math.max(0,+$("loanProcessing").value||0), gst=Math.max(0,+$("loanFeeGST").value||0), other=Math.max(0,+$("loanOtherCharges").value||0);
+    const standard=$("loanStandard")?.value||"reducing", r=rate/1200;
+    let interest,emi;
+    if(standard==="compound"){
+      interest=P*(Math.pow(1+r,n)-1);
+      emi=(P+interest)/n;
+    }else{
+      emi=loanEMI(P,rate,n);
+      interest=Math.max(0,emi*n-P);
+    }
+    const charges=processing+gst+other, repayment=P+interest, total=repayment+charges;
+    return {P,rate,n,processing,gst,other,standard,interest,emi,charges,repayment,total};
+  }
+
+  function monthlySchedule(d){
+    let balance=d.P, r=d.rate/1200, rows="";
+    for(let month=1;month<=d.n;month++){
+      let interest, principal, payment=d.emi;
+      if(d.standard==="compound"){
+        interest=d.P*r;
+        principal=Math.min(balance,Math.max(0,payment-interest));
+      }else{
+        interest=Math.max(0,balance*r);
+        principal=Math.min(balance,Math.max(0,payment-interest));
+      }
+      if(month===d.n){
+        principal=balance;
+        payment=principal+interest;
+      }
+      balance=Math.max(0,balance-principal);
+      rows+=`<tr><td>Month ${month}</td><td>${fmt(payment)}</td><td>${fmt(principal)}</td><td>${fmt(interest)}</td><td>${fmt(balance)}</td></tr>`;
+    }
+    return rows;
+  }
+
+  function buildPreview(){
+    const d=getReportData(), date=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+    const method=d.standard==="compound"?"Compound Interest":"Normal / Reducing Balance", ref="LR-"+Date.now().toString().slice(-8);
+    preview.innerHTML=`
+      <div class="loan-report-sheet">
+        <div class="loan-report-brand">
+          <div><div class="loan-report-brand-title">Loan Repayment Proposal</div><div class="loan-report-brand-sub">Illustrative financial calculation report · Full monthly schedule</div></div>
+          <div class="loan-report-ref">Reference: <b>${ref}</b><br>Prepared: ${date}</div>
+        </div>
+        <div class="loan-report-summary">
+          <div class="loan-report-metric"><div class="loan-report-metric-label">Loan Amount</div><div class="loan-report-metric-value">${fmt(d.P)}</div></div>
+          <div class="loan-report-metric"><div class="loan-report-metric-label">Interest Rate</div><div class="loan-report-metric-value">${d.rate}% p.a.</div></div>
+          <div class="loan-report-metric"><div class="loan-report-metric-label">Tenure</div><div class="loan-report-metric-value">${loanTenureText(d.n)}</div></div>
+          <div class="loan-report-metric"><div class="loan-report-metric-label">Monthly EMI</div><div class="loan-report-metric-value">${fmt(d.emi)}</div></div>
+        </div>
+        <div class="loan-report-section">Repayment Summary</div>
+        <table class="loan-report-table">
+          <tr><td>Calculation standard</td><td>${method}</td></tr>
+          <tr><td>Principal amount</td><td>${fmt(d.P)}</td></tr>
+          <tr><td>${method} interest</td><td>${fmt(d.interest)}</td></tr>
+          <tr><td>Loan repayment</td><td>${fmt(d.repayment)}</td></tr>
+          <tr><td>Processing Fee</td><td>${fmt(d.processing)}</td></tr>
+          <tr><td>GST</td><td>${fmt(d.gst)}</td></tr>
+          <tr><td>Other Charges</td><td>${fmt(d.other)}</td></tr>
+          <tr><td><b>Total additional charges</b></td><td><b>${fmt(d.charges)}</b></td></tr>
+          <tr><td><b>Total cost / repayment</b></td><td><b>${fmt(d.total)}</b></td></tr>
+        </table>
+        <div class="loan-report-section">Monthly Repayment Schedule</div>
+        <div class="loan-report-table-wrap"><table class="loan-report-table">
+          <tr><th>Month</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>
+          ${monthlySchedule(d)}
+        </table></div>
+        <div class="loan-report-note"><b>Important:</b> This is an illustrative repayment proposal based on the values entered in the calculator. It is not a sanction letter, loan approval, or offer from a bank or lender. Actual lender terms, fees, taxes and repayment schedules may differ.</div>
+        <div class="loan-report-disclaimer">Verify final terms, charges and the repayment schedule with the lender before making a financial decision.</div>
+      </div>`;
+  }
+
+  btn.addEventListener("click",()=>{
+    buildPreview(); modal.classList.add("is-open"); modal.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; document.documentElement.style.overflow="hidden"; preview.scrollTop=0;
+  });
+  function closeLoanReport(){
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+    document.documentElement.style.overflow="";
+  }
+  modal.querySelectorAll("[data-report-close]").forEach(x=>x.addEventListener("click",closeLoanReport));
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"&&modal.classList.contains("is-open")) closeLoanReport();
+  });
+
+  dl.addEventListener("click",()=>{
+    const d=getReportData(), J=window.jspdf?.jsPDF;
+    if(!J){
+      alert("PDF generator could not be loaded. Please check your internet connection.");
+      return;
+    }
+
+    const doc=new J({unit:"mm",format:"a4"});
+    const date=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+    const method=d.standard==="compound"?"Compound Interest":"Normal / Reducing Balance";
+    const ref="LR-"+Date.now().toString().slice(-8);
+    const M={l:16,r:194,top:16,bottom:281};
+    let y=M.top;
+
+    function pageHeader(continued=false){
+      doc.setTextColor(32,52,82);
+      doc.setFont("helvetica","bold"); doc.setFontSize(17);
+      doc.text("Loan Repayment Proposal",M.l,y);
+      doc.setFont("helvetica","normal"); doc.setFontSize(7.5);
+      doc.setTextColor(100,112,130);
+      doc.text(continued?"Illustrative financial calculation report · continued":"Illustrative financial calculation report",M.l,y+5);
+      doc.text("Reference: "+ref,M.r,y,{align:"right"});
+      doc.text("Prepared: "+date,M.r,y+5,{align:"right"});
+      doc.setDrawColor(83,109,254); doc.setLineWidth(.6);
+      doc.line(M.l,y+9,M.r,y+9);
+      y+=16;
+    }
+
+    function ensure(h){
+      if(y+h>M.bottom){
+        doc.addPage();
+        y=M.top;
+        pageHeader(true);
+      }
+    }
+
+    function title(t){
+      ensure(12);
+      doc.setTextColor(32,52,82);
+      doc.setFont("helvetica","bold"); doc.setFontSize(10.5);
+      doc.text(t,M.l,y);
+      y+=6;
+    }
+
+    pageHeader(false);
+
+    // Compact 2x2 summary cards.
+    title("Loan Summary");
+    const cards=[
+      ["Loan Amount",fmt(d.P)],["Interest Rate",d.rate+"% p.a."],
+      ["Tenure",loanTenureText(d.n)],["Monthly EMI",fmt(d.emi)]
+    ];
+    const cardW=86, cardH=15, gap=6;
+    cards.forEach((v,i)=>{
+      const x=M.l+(i%2)*(cardW+gap), yy=y+Math.floor(i/2)*(cardH+5);
+      doc.setDrawColor(220,226,236); doc.setFillColor(247,249,252);
+      doc.roundedRect(x,yy,cardW,cardH,2,2,"FD");
+      doc.setTextColor(112,124,142);doc.setFont("helvetica","normal");doc.setFontSize(6.5);doc.text(v[0],x+4,yy+5);
+      doc.setTextColor(32,52,82);doc.setFont("helvetica","bold");doc.setFontSize(9.5);doc.text(v[1],x+4,yy+11);
+    });
+    y+=35;
+
+    title("Repayment Details");
+    const details=[
+      ["Calculation standard",method],
+      ["Principal amount",fmt(d.P)],
+      [method+" interest",fmt(d.interest)],
+      ["Loan repayment",fmt(d.repayment)],
+      ["Processing Fee",fmt(d.processing)],
+      ["GST",fmt(d.gst)],
+      ["Other Charges",fmt(d.other)],
+      ["Total additional charges",fmt(d.charges)],
+      ["Total cost / repayment",fmt(d.total)]
+    ];
+    const rowH=6.3;
+    details.forEach((v,i)=>{
+      ensure(rowH+2);
+      if(i===details.length-2) {
+        doc.setDrawColor(215,222,233); doc.line(M.l,y-2,M.r,y-2);
+      }
+      doc.setTextColor(48,65,89); doc.setFont("helvetica","normal"); doc.setFontSize(7.6);
+      doc.text(v[0],M.l+2,y);
+      doc.setFont("helvetica","bold");
+      doc.text(v[1],M.r-2,y,{align:"right"});
+      doc.setDrawColor(235,238,244); doc.setLineWidth(.25);
+      doc.line(M.l,y+2,M.r,y+2);
+      y+=rowH;
+    });
+    y+=5;
+
+    title("Monthly Repayment Schedule");
+
+    function scheduleHeader(){
+      doc.setFillColor(241,244,255);
+      doc.rect(M.l,y-4,M.r-M.l,7,"F");
+      doc.setTextColor(69,84,110);doc.setFont("helvetica","bold");doc.setFontSize(7);
+      const xs=[M.l+2,75,110,148,192];
+      ["Month","Payment","Principal","Interest","Balance"].forEach((v,i)=>{
+        doc.text(v,xs[i],y,{align:i===0?"left":"right"});
+      });
+      y+=6;
+    }
+
+    scheduleHeader();
+
+    let balance=d.P, rr=d.rate/1200;
+    for(let month=1;month<=d.n;month++){
+      let interest,principal,payment=d.emi;
+      if(d.standard==="compound"){
+        interest=d.P*rr;
+        principal=Math.min(balance,Math.max(0,payment-interest));
+      }else{
+        interest=Math.max(0,balance*rr);
+        principal=Math.min(balance,Math.max(0,payment-interest));
+      }
+      if(month===d.n){
+        principal=balance;
+        payment=principal+interest;
+      }
+      balance=Math.max(0,balance-principal);
+
+      if(y> M.bottom-5){
+        doc.addPage();
+        y=M.top;
+        pageHeader(true);
+        doc.setTextColor(32,52,82);doc.setFont("helvetica","bold");doc.setFontSize(10);
+        doc.text("Monthly Repayment Schedule — continued",M.l,y);
+        y+=7;
+        scheduleHeader();
+      }
+
+      doc.setTextColor(48,65,89);doc.setFont("helvetica","normal");doc.setFontSize(7);
+      const vals=["Month "+month,fmt(payment),fmt(principal),fmt(interest),fmt(balance)];
+      const xs=[M.l+2,75,110,148,192];
+      vals.forEach((v,i)=>doc.text(v,xs[i],y,{align:i===0?"left":"right"}));
+      doc.setDrawColor(239,242,246);doc.setLineWidth(.2);doc.line(M.l,y+2,M.r,y+2);
+      y+=5.2;
+    }
+
+    ensure(28);
+    y+=5;
+    doc.setFillColor(255,249,237);doc.setDrawColor(239,220,174);
+    doc.roundedRect(M.l,y-4,M.r-M.l,19,2,2,"FD");
+    doc.setTextColor(113,88,43);doc.setFont("helvetica","bold");doc.setFontSize(7.5);doc.text("Important",M.l+3,y+1);
+    doc.setFont("helvetica","normal");doc.setFontSize(6.8);
+    const note="This is an illustrative repayment proposal based on calculator inputs. It is not a sanction letter, loan approval, or offer from a bank or lender. Actual lender terms, fees, taxes and repayment schedules may differ.";
+    doc.text(doc.splitTextToSize(note,M.r-M.l-8),M.l+3,y+6);
+
+    // Consistent footer on every page.
+    const totalPages=doc.getNumberOfPages();
+    for(let p=1;p<=totalPages;p++){
+      doc.setPage(p);
+      doc.setTextColor(130,140,154);doc.setFont("helvetica","normal");doc.setFontSize(6.5);
+      doc.text("Illustrative report · Verify final terms with the lender",M.l,289);
+      doc.text("Page "+p+" of "+totalPages,M.r,289,{align:"right"});
+    }
+
+    doc.save("loan-repayment-proposal-"+ref+".pdf");
+  });
+})();
+</script>
+
 </body>
 </html>
