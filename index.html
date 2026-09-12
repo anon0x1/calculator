@@ -110,9 +110,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 @media(prefers-reduced-motion:reduce){
  *,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
-.charge-field{margin-top:5px}
-.money-input{width:100%;box-sizing:border-box;border:1px solid #dfe5f1;background:#fff;border-radius:10px;padding:10px 12px;font:inherit;color:#20304d;outline:none;transition:border-color .2s,box-shadow .2s}
-.money-input:focus{border-color:#536dfe;box-shadow:0 0 0 3px rgba(83,109,254,.10)}
+<style>
+.fee-table{margin:18px 0 14px;border:1px solid #e4e9f4;border-radius:13px;overflow:hidden;background:#fff}.fee-title{padding:11px 14px;font-size:13px;font-weight:800;color:#253858;background:#f6f8fc;border-bottom:1px solid #e7ebf3}.fee-row{display:grid;grid-template-columns:1fr 150px;align-items:center;min-height:48px;padding:7px 14px;border-bottom:1px solid #edf0f5;gap:18px}.fee-row:last-child{border-bottom:0}.fee-row label{font-size:13px;color:#53627b}.fee-input{display:flex;align-items:center;border:1px solid #dce2ee;border-radius:9px;background:#fbfcfe;height:36px;overflow:hidden}.fee-input span{padding-left:10px;color:#74819a;font-size:13px}.fee-input input{width:100%;border:0;outline:0;background:transparent;padding:7px 9px 7px 5px;text-align:right;color:#253858;font:inherit}.standard-select{display:grid;grid-template-columns:1fr 250px;gap:18px;align-items:center;margin:14px 0 18px}.standard-select label{font-size:13px;font-weight:700;color:#53627b}.standard-select select{width:100%;height:40px;padding:0 12px;border:1px solid #dce2ee;border-radius:9px;background:#fff;color:#253858;font:inherit;outline:none}@media(max-width:700px){.fee-row,.standard-select{grid-template-columns:1fr}.fee-row{gap:7px}.standard-select{gap:8px}}
+</style>
 </style>
 </head>
 <body>
@@ -131,39 +131,455 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <button class="tab" data-tab="gst">GST</button>
 </div>
 
+
+<style>
+/* Loan EMI: left inputs/charges, right results */
+#loan .grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  column-gap:55px !important;
+  row-gap:0 !important;
+  align-items:start !important;
+}
+#loan .loan-left,
+#loan .loan-right{
+  min-width:0;
+}
+#loan .loan-left{grid-column:1;grid-row:1}
+#loan .loan-right{grid-column:2;grid-row:1}
+
+/* Keep the left-side sections close together */
+#loan .field{margin-bottom:28px}
+#loan .fee-table{
+  width:100%;
+  margin:2px 0 18px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 20px rgba(27,39,70,.045);
+}
+#loan .fee-title{
+  padding:13px 14px;
+  font-size:13px;
+  font-weight:800;
+  color:#253858;
+  background:#f6f8fc;
+  border-bottom:1px solid #e7ebf3;
+}
+#loan .fee-row{
+  grid-template-columns:minmax(0,1fr) 145px;
+  min-height:48px;
+  padding:6px 14px;
+  gap:14px;
+}
+
+/* Calculation Standard directly below Additional Charges */
+#loan .standard-wrap{
+  position:relative;
+  margin-top:0;
+}
+#loan .standard-select{
+  margin:0;
+  grid-template-columns:minmax(0,1fr) 250px;
+  gap:14px;
+}
+#loan .standard-select label{cursor:help}
+
+/* Description is hidden by default and appears on hover */
+#loan .note{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 8px);
+  margin:0;
+  padding:11px 13px;
+  background:#253858;
+  color:#fff;
+  border-radius:9px;
+  font-size:12px;
+  line-height:1.5;
+  box-shadow:0 8px 22px rgba(27,39,70,.16);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-4px);
+  transition:opacity .18s ease,transform .18s ease,visibility .18s ease;
+  z-index:10;
+}
+#loan .standard-wrap:hover .note{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+#loan .loan-right .emi-box{margin-bottom:22px}
+#loan .loan-right .chart{margin-top:8px;margin-bottom:20px}
+#loan .loan-right .rows{margin-top:22px}
+
+@media(max-width:760px){
+  #loan .grid{
+    grid-template-columns:1fr !important;
+    row-gap:10px !important;
+  }
+  #loan .loan-left,
+  #loan .loan-right{
+    grid-column:1 !important;
+    grid-row:auto !important;
+  }
+  #loan .standard-select{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+}
+</style>
+
+<style>
+/* Final Loan EMI layout */
+#loan .grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  column-gap:55px !important;
+  row-gap:0 !important;
+  align-items:start !important;
+}
+#loan .loan-left{grid-column:1;grid-row:1;min-width:0}
+#loan .loan-right{grid-column:2;grid-row:1;min-width:0}
+
+#loan .field{margin-bottom:28px}
+
+#loan .fee-table{
+  width:100%;
+  margin:2px 0 18px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 6px 20px rgba(27,39,70,.045);
+}
+#loan .fee-title{
+  padding:13px 14px;
+  font-size:13px;
+  font-weight:800;
+  color:#253858;
+  background:#f6f8fc;
+  border-bottom:1px solid #e7ebf3;
+}
+#loan .fee-row{
+  grid-template-columns:minmax(0,1fr) 145px;
+  min-height:48px;
+  padding:6px 14px;
+  gap:14px;
+}
+
+#loan .standard-wrap{
+  position:relative;
+  margin-top:0;
+}
+#loan .standard-select{
+  margin:0;
+  grid-template-columns:minmax(0,1fr) 250px;
+  gap:14px;
+}
+
+/* Description appears only while hovering the Calculation Standard area */
+#loan .note{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 8px);
+  margin:0;
+  padding:11px 13px;
+  background:#253858;
+  color:#fff;
+  border-radius:9px;
+  font-size:12px;
+  line-height:1.5;
+  box-shadow:0 8px 22px rgba(27,39,70,.16);
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(-4px);
+  transition:opacity .18s ease,transform .18s ease,visibility .18s ease;
+  z-index:10;
+}
+#loan .standard-wrap:hover .note{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+#loan .loan-right .emi-box{margin-bottom:22px}
+#loan .loan-right .chart{margin-top:8px;margin-bottom:20px}
+#loan .loan-right .rows{margin-top:22px}
+
+@media(max-width:760px){
+  #loan .grid{
+    grid-template-columns:1fr !important;
+    row-gap:10px !important;
+  }
+  #loan .loan-left,
+  #loan .loan-right{
+    grid-column:1 !important;
+    grid-row:auto !important;
+  }
+  #loan .standard-select{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+}
+</style>
+
+<style>
+/* Compact expandable calculation guide — Loan only */
+#loan .loan-guide{
+  margin-top:22px;
+  border-top:1px solid #edf0f5;
+  padding-top:18px;
+}
+#loan .loan-guide-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+#loan .loan-guide-title{
+  font-size:14px;
+  font-weight:800;
+  color:#253858;
+}
+#loan .loan-guide-sub{
+  margin-top:3px;
+  font-size:11px;
+  color:#8a95a7;
+}
+#loan .loan-guide-icon{
+  width:25px;
+  height:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#f1f4ff;
+  color:#536dfe;
+  font-size:17px;
+  font-weight:700;
+}
+
+#loan .calc-card{
+  margin-top:8px;
+  border:1px solid #e7ebf2;
+  border-radius:11px;
+  overflow:hidden;
+  background:#fff;
+  transition:box-shadow .18s ease,border-color .18s ease;
+}
+#loan .calc-card:hover{
+  box-shadow:0 5px 16px rgba(27,39,70,.07);
+}
+#loan .calc-card summary{
+  min-height:43px;
+  padding:7px 11px;
+  display:grid;
+  grid-template-columns:29px minmax(0,1fr) 18px;
+  align-items:center;
+  gap:8px;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+}
+#loan .calc-card summary::-webkit-details-marker{display:none}
+#loan .calc-badge{
+  width:27px;
+  height:27px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:800;
+}
+#loan .calc-card-emi .calc-badge{background:#eafaf5;color:#008c68}
+#loan .calc-card-interest .calc-badge{background:#f1f4ff;color:#536dfe}
+#loan .calc-card-charges .calc-badge{background:#fff4e8;color:#c77a12}
+
+#loan .calc-name{
+  font-size:12px;
+  font-weight:700;
+  color:#33435f;
+}
+#loan .calc-chevron{
+  color:#8a95a7;
+  font-size:16px;
+  text-align:center;
+  transition:transform .18s ease;
+}
+#loan .calc-card[open] .calc-chevron{
+  transform:rotate(180deg);
+}
+#loan .calc-body{
+  padding:0 12px 12px 48px;
+  color:#66748b;
+  font-size:11px;
+  line-height:1.55;
+}
+#loan .calc-body b{color:#33435f}
+#loan .formula{
+  margin-top:7px;
+  padding:7px 9px;
+  border-radius:7px;
+  background:#f7f9fc;
+  color:#53627b;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;
+  overflow-x:auto;
+  white-space:nowrap;
+}
+#loan .calc-card[open]{
+  border-color:#dfe5f0;
+}
+
+@media(max-width:760px){
+  #loan .loan-guide{
+    margin-top:18px;
+  }
+}
+</style>
+
+
+<style>
+/* Complete hide/show control for the Loan calculation guide */
+#loan .loan-guide{
+  transition:opacity .18s ease,margin .18s ease,padding .18s ease;
+}
+#loan .loan-guide-head{
+  gap:12px;
+}
+#loan .loan-guide-hide{
+  border:0;
+  background:transparent;
+  color:#7a869a;
+  font:inherit;
+  font-size:11px;
+  cursor:pointer;
+  padding:5px 7px;
+  border-radius:6px;
+}
+#loan .loan-guide-hide:hover{
+  background:#f3f6fa;
+  color:#253858;
+}
+#loan .loan-guide-show{
+  display:none;
+  margin-top:18px;
+  border:1px solid #dfe5f0;
+  background:#fff;
+  color:#53627b;
+  border-radius:8px;
+  padding:8px 11px;
+  font:inherit;
+  font-size:11px;
+  cursor:pointer;
+}
+#loan .loan-guide-show:hover{
+  background:#f7f9fc;
+  color:#253858;
+}
+#loan .loan-guide.is-hidden{
+  display:none;
+}
+#loan .loan-guide.is-hidden + .loan-guide-show{
+  display:inline-flex;
+  align-items:center;
+}
+</style>
+
 <!-- LOAN -->
 <section class="panel active" id="loan">
-<div class="grid"><div>
-<div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
-<div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"><div class="range-labels"><span>0%</span><span>30%</span></div></div>
-<div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><input id="loanTenure" type="range" min="1" max="360" value="36"><div class="range-labels"><span>1 month</span><span>30 years</span></div></div>
-<div class="field charge-field"><div class="head"><span class="label">Processing Fee</span><span class="value">₹</span></div><input id="processingFee" class="money-input" type="number" min="0" step="100" value="0" inputmode="numeric"></div>
-<div class="field charge-field"><div class="head"><span class="label">GST</span><span class="value">₹</span></div><input id="loanGST" class="money-input" type="number" min="0" step="100" value="0" inputmode="numeric"></div>
-<div class="field charge-field"><div class="head"><span class="label">Other Charges</span><span class="value">₹</span></div><input id="otherCharges" class="money-input" type="number" min="0" step="100" value="0" inputmode="numeric"></div>
+<div class="grid">
+  <div class="loan-left">
+    <div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
+    <div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"><div class="range-labels"><span>0%</span><span>30%</span></div></div>
+    <div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><input id="loanTenure" type="range" min="1" max="360" value="36"><div class="range-labels"><span>1 month</span><span>30 years</span></div></div>
 
-</div><div>
-<div class="emi-box">
-<div class="small">Monthly EMI</div>
-<div style="display:flex;align-items:center;justify-content:center;gap:2px">
-<span style="font-size:36px;font-weight:bold;color:#536dfe">₹</span>
-<input id="loanEmi" type="number" min="1" step="1" value="6739"
-aria-label="Monthly EMI"
-style="width:170px;border:0;background:transparent;text-align:center;font-size:36px;font-weight:bold;color:#536dfe;outline:none">
-</div>
-<div class="small" id="loanPayments">36 monthly payments</div>
+    <div class="fee-table">
+      <div class="fee-title">Additional Charges</div>
+      <div class="fee-row"><label for="loanProcessing">Processing Fee</label><div class="fee-input"><span>₹</span><input id="loanProcessing" type="number" min="0" max="1000000" step="100" value="0"></div></div>
+      <div class="fee-row"><label for="loanFeeGST">GST</label><div class="fee-input"><span>₹</span><input id="loanFeeGST" type="number" min="0" max="1000000" step="100" value="0"></div></div>
+      <div class="fee-row"><label for="loanOtherCharges">Other Charges</label><div class="fee-input"><span>₹</span><input id="loanOtherCharges" type="number" min="0" max="1000000" step="100" value="0"></div></div>
+    </div>
 
-<div class="error" id="loanError"></div>
+    <div class="standard-wrap">
+      <div class="standard-select">
+        <label for="loanStandard">Calculation Standard</label>
+        <select id="loanStandard"><option value="reducing" selected>Normal</option><option value="compound">Compound Interest</option></select>
+      </div>
+      <div class="note" id="loanNote">Reducing Balance is the standard method used for most bank EMI loans. Interest is calculated on the outstanding principal after each payment.</div>
+    </div>
+
+<div class="loan-guide is-hidden">
+  <div class="loan-guide-head">
+    <div>
+      <div class="loan-guide-title">How your loan is calculated</div>
+      <div class="loan-guide-sub">Quick reference — expand any row</div>
+    </div>
+    <button type="button" class="loan-guide-hide" id="loanGuideHide" aria-label="Hide loan calculation guide">Hide</button>
+  </div>
+
+  <details class="calc-card calc-card-emi" open>
+    <summary>
+      <span class="calc-badge">01</span>
+      <span class="calc-name">Monthly EMI</span>
+      <span class="calc-chevron">⌄</span>
+    </summary>
+    <div class="calc-body">
+      <b>Reducing Balance:</b> EMI is calculated from the loan amount, annual interest rate and tenure. Interest reduces as the outstanding principal is repaid.
+      <div class="formula">EMI = P × r × (1 + r)ⁿ ÷ ((1 + r)ⁿ − 1)</div>
+    </div>
+  </details>
+
+  <details class="calc-card calc-card-interest">
+    <summary>
+      <span class="calc-badge">02</span>
+      <span class="calc-name">Interest &amp; repayment</span>
+      <span class="calc-chevron">⌄</span>
+    </summary>
+    <div class="calc-body">
+      <b>Reducing Balance:</b> Total interest is the amount paid above the original principal.
+      <br><b>Compound Interest:</b> Interest compounds monthly on the original principal and the repayment is spread across the selected tenure.
+    </div>
+  </details>
+
+  <details class="calc-card calc-card-charges">
+    <summary>
+      <span class="calc-badge">03</span>
+      <span class="calc-name">Additional charges</span>
+      <span class="calc-chevron">⌄</span>
+    </summary>
+    <div class="calc-body">
+      Processing Fee, GST and Other Charges are added to the loan repayment to show the <b>total cost</b>.
+      <div class="formula">Total Cost = Principal + Interest + Additional Charges</div>
+    </div>
+  </details>
 </div>
-<div class="chart" id="loanChart" style="--p:28%"><div class="chart-inner"><div class="chart-title">Total Cost</div><div class="chart-sub">Principal + interest</div></div></div>
-<div class="legend"><span><i class="dot d1"></i>Principal: <b id="loanPP">72%</b></span><span><i class="dot d2"></i>Interest: <b id="loanIP">28%</b></span></div>
-<div style="margin:22px 0 4px">
-<div style="height:8px;border-radius:20px;background:#edf0f6;overflow:hidden">
-<div id="loanProgress" style="height:100%;width:72%;background:linear-gradient(90deg,#00a878,#536dfe);border-radius:20px;transition:width .45s ease"></div>
+  <button type="button" class="loan-guide-show" id="loanGuideShow">Show loan calculation details</button>
+  </div>
+
+  <div class="loan-right">
+    <div class="emi-box">
+      <div class="small">Monthly EMI</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:2px">
+        <span style="font-size:36px;font-weight:bold;color:#536dfe">₹</span>
+        <input id="loanEmi" type="number" min="1" step="1" value="6739" aria-label="Monthly EMI" style="width:170px;border:0;background:transparent;text-align:center;font-size:36px;font-weight:bold;color:#536dfe;outline:none">
+      </div>
+      <div class="small" id="loanPayments">36 monthly payments</div>
+      <div class="error" id="loanError"></div>
+    </div>
+
+    <div class="chart" id="loanChart" style="--p:28%"><div class="chart-inner"><div class="chart-title">Total Cost</div><div class="chart-sub">Principal + interest</div></div></div>
+    <div class="legend"><span><i class="dot d1"></i>Principal: <b id="loanPrincipalPct">72%</b></span><span><i class="dot d2"></i>Interest: <b id="loanInterestPct">28%</b></span></div>
+    <div style="margin:22px 0 4px"><div style="height:8px;border-radius:20px;background:#edf0f6;overflow:hidden"><div id="loanProgress" style="height:100%;width:72%;background:linear-gradient(90deg,#00a878,#536dfe);border-radius:20px;transition:width .45s ease"></div></div></div>
+    <div class="rows"><div class="row"><span>Processing Fee</span><b id="processingOut">₹0</b></div><div class="row"><span>GST</span><b id="feeGSTOut">₹0</b></div><div class="row"><span>Other Charges</span><b id="otherOut">₹0</b></div><div class="row"><span>Additional Charges</span><b id="chargesOut">₹0</b></div><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span id="loanInterestLabel">Total reducing interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span id="loanTotalLabel">Total repayment with interest</span><strong id="loanTotal">₹2,78,000</strong></div></div>
+  </div>
 </div>
-</div>
-<div class="rows"><div class="row"><span>Loan duration</span><strong id="loanMonths">36 months</strong></div><div class="row"><span>Without interest</span><strong id="loanPrincipal">₹2,00,000</strong></div><div class="row"><span>Total interest</span><strong id="loanInterest">₹78,000</strong></div><div class="row"><span>Processing fee</span><strong id="loanProcessingFee">₹0</strong></div><div class="row"><span>GST</span><strong id="loanGSTAmount">₹0</strong></div><div class="row"><span>Other charges</span><strong id="loanOtherCharges">₹0</strong></div><div class="row"><span>Total cost with interest + charges</span><strong id="loanTotal">₹2,78,000</strong></div></div>
-<div class="note">Uses the standard reducing-balance EMI formula. Optional bank charges are included in the total cost. Displayed currency values are rounded to the nearest rupee.</div>
-</div></div>
 </section>
 
 <!-- CTC -->
@@ -271,24 +687,31 @@ function loanEMI(P,a,n){
 }
 let loanEMIEditing=false;
 function renderLoan(P,a,n,emi){
- const processing=Math.max(0,Number($("processingFee").value)||0),gst=Math.max(0,Number($("loanGST").value)||0),other=Math.max(0,Number($("otherCharges").value)||0);
- const charges=processing+gst+other,total=emi*n+charges,interest=Math.max(0,emi*n-P),ip=(emi*n)?P/(emi*n)*100:100,rp=100-ip;
- $("loanAmountV").textContent=money(P);
- $("loanRateV").textContent=a+"%";
- $("loanTenureV").textContent=loanTenureText(n);
- setText("loanMonths",n+" months");
- $("loanPrincipal").textContent=money(P);
- setText("loanInterest",money(interest));
- setText("loanProcessingFee",money(processing));
- setText("loanGSTAmount",money(gst));
- setText("loanOtherCharges",money(other));
- setText("loanTotal",money(total));
- $("loanEmi").value=Math.round(emi);
- $("loanPayments").textContent=n+" monthly payments";
- $("loanChart").style.setProperty("--p",rp+"%");
- $("loanProgress").style.width=Math.max(0,Math.min(100,ip))+"%";
- $("loanPP").textContent=Math.round(ip)+"%";
- $("loanIP").textContent=Math.round(rp)+"%";
+ const standard=$("loanStandard")?.value||"reducing";
+ const processing=Math.max(0,+$("loanProcessing").value||0), feeGST=Math.max(0,+$("loanFeeGST").value||0), otherCharges=Math.max(0,+$("loanOtherCharges").value||0);
+ const r=a/1200;
+ let calculatedEMI=emi, interest;
+ if(standard==="compound"){
+   interest=P*(Math.pow(1+r,n)-1);
+   calculatedEMI=(P+interest)/n;
+   $("loanNote").textContent="Compound Interest: interest is compounded monthly on the original principal and the repayment is spread across the selected tenure.";
+   setText("loanInterestLabel","Compound interest");
+   setText("loanTotalLabel","Total repayment with compound interest");
+ }else{
+   calculatedEMI=emi==null?loanEMI(P,a,n):emi;
+   interest=Math.max(0,calculatedEMI*n-P);
+   $("loanNote").textContent="Reducing Balance: interest is calculated on the outstanding principal after each payment.";
+   setText("loanInterestLabel","Total Normal / Reducing interest");
+   setText("loanTotalLabel","Total Normal / Reducing interest");
+ }
+ const loanRepayment=P+interest, charges=processing+feeGST+otherCharges, grandTotal=loanRepayment+charges;
+ const ip=loanRepayment?P/loanRepayment*100:100, rp=100-ip;
+ $("loanAmountV").textContent=money(P); $("loanRateV").textContent=a+"%"; $("loanTenureV").textContent=loanTenureText(n);
+ setText("loanMonths",n+" months"); setText("loanPayments",n+" monthly payments"); $("loanPrincipal").textContent=money(P); setText("loanInterest",money(interest)); setText("loanTotal",money(grandTotal)); $("loanEmi").value=Math.round(calculatedEMI);
+ $("processingOut").textContent=money(processing); $("feeGSTOut").textContent=money(feeGST); $("otherOut").textContent=money(otherCharges); $("chargesOut").textContent=money(charges);
+ const chart=$("loanChart"); if(chart){chart.style.setProperty("--p",Math.max(0,Math.min(100,ip))+"%");const sub=chart.querySelector(".chart-sub");if(sub)sub.textContent=standard==="compound"?"Principal + compound interest":"Principal + reducing interest";}
+ const lp=$("loanProgress");if(lp)lp.style.width=Math.max(0,Math.min(100,ip))+"%";
+ const d1=$("loanPrincipalPct"),d2=$("loanInterestPct");if(d1)d1.textContent=Math.round(ip)+"%";if(d2)d2.textContent=Math.round(rp)+"%";
 }
 function calcLoanFromTenure(){
  const P=+$("loanAmount").value,a=+$("loanRate").value,n=+$("loanTenure").value;
@@ -297,34 +720,16 @@ function calcLoanFromTenure(){
  renderLoan(P,a,n,emi);
 }
 function calcLoanFromEMI(){
- const P=+$("loanAmount").value,a=+$("loanRate").value,target=+$("loanEmi").value,r=a/1200;
- if(!target||target<=0){$("loanError").textContent="Enter a valid EMI.";return}
- let n;
- if(!r){
-   n=Math.ceil(P/target);
- }else{
-   if(target<=P*r){
-     $("loanError").textContent="EMI must be higher than the monthly interest.";
-     return;
-   }
-   n=Math.ceil(-Math.log(1-P*r/target)/Math.log(1+r));
- }
- if(n>360){
-   $("loanError").textContent="Required tenure exceeds the 30-year limit.";
-   n=360;
- }else{
-   $("loanError").textContent="";
- }
- $("loanTenure").value=n;
- renderLoan(P,a,n,loanEMI(P,a,n));
+ const P=+$("loanAmount").value, a=+$("loanRate").value, target=+$("loanEmi").value||0, standard=$("loanStandard")?.value||"reducing", r=a/1200;
+ if(target<=0)return;
+ let n=1;
+ if(standard==="compound"){while(n<360 && (P*(Math.pow(1+r,n)-1)+P)/n>target)n++;}
+ else{if(r>0&&target<=P*r)return;n=r===0?Math.ceil(P/target):Math.ceil(-Math.log(1-P*r/target)/Math.log(1+r));}
+ $("loanTenure").value=Math.min(360,Math.max(1,n)); renderLoan(P,a,+$("loanTenure").value);
 }
 $("loanAmount").addEventListener("input",calcLoanFromTenure);
 $("loanRate").addEventListener("input",calcLoanFromTenure);
 $("loanTenure").addEventListener("input",calcLoanFromTenure);
-["processingFee","loanGST","otherCharges"].forEach(id=>$(id).addEventListener("input",()=>{
- const P=+$("loanAmount").value,a=+$("loanRate").value,n=+$("loanTenure").value;
- renderLoan(P,a,n,loanEMI(P,a,n));
-}));
 $("loanEmi").addEventListener("input",calcLoanFromEMI);
 calcLoanFromTenure();
 
@@ -375,6 +780,22 @@ function calcGST(){
  setText("gstTotal",money(total));$("gstBase").textContent=money(base);$("gstTax").textContent=money(tax);$("gstFinal").textContent=money(total);
 }
 ["gstAmt","gstRate","gstMode"].forEach(x=>$(x).addEventListener("input",calcGST));calcGST();
+
+["loanProcessing","loanFeeGST","loanOtherCharges","loanStandard"].forEach(id=>$(id).addEventListener("input",()=>renderLoan(+$("loanAmount").value,+$("loanRate").value,+$("loanTenure").value)));
+["loanProcessing","loanFeeGST","loanOtherCharges","loanStandard"].forEach(id=>$(id).addEventListener("change",()=>renderLoan(+$("loanAmount").value,+$("loanRate").value,+$("loanTenure").value)));
+
+// Loan calculation guide complete hide/show
+const loanGuide=$("loan")?.querySelector(".loan-guide");
+const loanGuideHide=$("loanGuideHide");
+const loanGuideShow=$("loanGuideShow");
+if(loanGuide&&loanGuideHide&&loanGuideShow){
+  loanGuideHide.addEventListener("click",()=>{
+    loanGuide.classList.add("is-hidden");
+  });
+  loanGuideShow.addEventListener("click",()=>{
+    loanGuide.classList.remove("is-hidden");
+  });
+}
 </script>
 </body>
 </html>
