@@ -896,12 +896,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
   <div class="loan-left">
     <div class="field"><div class="head"><span class="label">Loan amount</span><span class="value" id="loanAmountV">₹2,00,000</span></div><div class="range-with-manual">
   <div class="range-main"><input id="loanAmount" type="range" min="10000" max="10000000" step="10000" value="200000"></div>
-  <div class="manual-value-wrap"><input id="manual_loanAmount" type="number" min="10000" max="10000000" step="10000" value="200000" inputmode="decimal" aria-label="Manual value for loanAmount"></div>
-</div><div class="range-labels"><span>₹10K</span><span>₹1 Cr</span></div></div>
+  <div class="manual-value-wrap"><input id="manual_loanAmount" type="number" min="0" step="1" value="200000" inputmode="decimal" aria-label="Manual value for loanAmount"></div>
+</div><div class="range-labels"><span>₹10K+</span><span>Manual entry</span></div></div>
     <div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="loanRateV">13%</span></div><div class="range-with-manual">
-  <div class="range-main"><input id="loanRate" type="range" min="0" max="30" step=".1" value="13"></div>
-  <div class="manual-value-wrap"><input id="manual_loanRate" type="number" min="0" max="30" step=".1" value="13" inputmode="decimal" aria-label="Manual value for loanRate"></div>
-</div><div class="range-labels"><span>0%</span><span>30%</span></div></div>
+  <div class="range-main"><input id="loanRate" type="range" min="0" max="100" step=".1" value="13"></div>
+  <div class="manual-value-wrap"><input id="manual_loanRate" type="number" min="0" step=".1" value="13" inputmode="decimal" aria-label="Manual value for loanRate"></div>
+</div><div class="range-labels"><span>0%</span><span>100%</span></div></div>
     <div class="field"><div class="head"><span class="label">Loan tenure</span><span class="value" id="loanTenureV">3 Yrs</span></div><div class="range-with-manual">
   <div class="range-main"><input id="loanTenure" type="range" min="1" max="360" value="36"></div>
   <div class="manual-value-wrap"><input id="manual_loanTenure" type="number" min="1" max="360" step="1" value="36" inputmode="decimal" aria-label="Manual value for loanTenure"></div>
@@ -909,9 +909,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 
     <div class="fee-table">
       <div class="fee-title">Additional Charges</div>
-      <div class="fee-row"><label for="loanProcessing">Processing Fee</label><div class="fee-input"><span>₹</span><input id="loanProcessing" type="number" min="0" max="1000000" step="100" value="0"></div></div>
-      <div class="fee-row"><label for="loanFeeGST">GST</label><div class="fee-input"><span>₹</span><input id="loanFeeGST" type="number" min="0" max="1000000" step="100" value="0"></div></div>
-      <div class="fee-row"><label for="loanOtherCharges">Other Charges</label><div class="fee-input"><span>₹</span><input id="loanOtherCharges" type="number" min="0" max="1000000" step="100" value="0"></div></div>
+      <div class="fee-row"><label for="loanProcessing">Processing Fee</label><div class="fee-input"><span>₹</span><input id="loanProcessing" type="number" min="0" step="1" value="0"></div></div>
+      <div class="fee-row"><label for="loanFeeGST">GST</label><div class="fee-input"><span>₹</span><input id="loanFeeGST" type="number" min="0" step="1" value="0"></div></div>
+      <div class="fee-row"><label for="loanOtherCharges">Other Charges</label><div class="fee-input"><span>₹</span><input id="loanOtherCharges" type="number" min="0" step="1" value="0"></div></div>
     </div>
 
     <div class="standard-wrap">
@@ -1019,8 +1019,8 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <div class="grid"><div>
 <div class="field"><div class="head"><span class="label">Annual CTC</span><span class="value" id="ctcV">₹2,00,000</span></div><div class="range-with-manual">
   <div class="range-main"><input id="ctcInput" type="range" min="100000" max="10000000" step="10000" value="200000"></div>
-  <div class="manual-value-wrap"><input id="manual_ctcInput" type="number" min="100000" max="10000000" step="10000" value="200000" inputmode="decimal" aria-label="Manual value for ctcInput"></div>
-</div><div class="range-labels"><span>₹1L</span><span>₹1 Cr</span></div></div>
+  <div class="manual-value-wrap"><input id="manual_ctcInput" type="number" min="0" step="1" value="200000" inputmode="decimal" aria-label="Manual value for ctcInput"></div>
+</div><div class="range-labels"><span>₹1L+</span><span>Manual entry</span></div></div>
 <div class="field"><div class="head"><span class="label">Employee PF <em>(monthly)</em></span><span class="value" id="pfV">₹1,800/mo</span></div><div class="range-with-manual">
   <div class="range-main"><input id="pf" type="range" min="0" max="25000" step="100" value="1800"></div>
   <div class="manual-value-wrap"><input id="manual_pf" type="number" min="0" max="25000" step="100" value="1800" inputmode="decimal" aria-label="Manual value for pf"></div>
@@ -1063,11 +1063,11 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <div class="grid"><div>
 <div class="field"><div class="head"><span class="label">Monthly investment</span><span class="value" id="sipV">₹10,000</span></div><div class="range-with-manual">
   <div class="range-main"><input id="sipAmt" type="range" min="500" max="500000" step="500" value="10000"></div>
-  <div class="manual-value-wrap"><input id="manual_sipAmt" type="number" min="500" max="500000" step="500" value="10000" inputmode="decimal" aria-label="Manual value for sipAmt"></div>
-</div><div class="range-labels"><span>₹500</span><span>₹5L</span></div></div>
+  <div class="manual-value-wrap"><input id="manual_sipAmt" type="number" min="0" step="1" value="10000" inputmode="decimal" aria-label="Manual value for sipAmt"></div>
+</div><div class="range-labels"><span>₹500+</span><span>Manual entry</span></div></div>
 <div class="field"><div class="head"><span class="label">Expected return (p.a.)</span><span class="value" id="sipRateV">12%</span></div><div class="range-with-manual">
-  <div class="range-main"><input id="sipRate" type="range" min="0" max="30" step=".1" value="12"></div>
-  <div class="manual-value-wrap"><input id="manual_sipRate" type="number" min="0" max="30" step=".1" value="12" inputmode="decimal" aria-label="Manual value for sipRate"></div>
+  <div class="range-main"><input id="sipRate" type="range" min="0" max="100" step=".1" value="12"></div>
+  <div class="manual-value-wrap"><input id="manual_sipRate" type="number" min="0" step=".1" value="12" inputmode="decimal" aria-label="Manual value for sipRate"></div>
 </div></div>
 <div class="field"><div class="head"><span class="label">Investment period</span><span class="value" id="sipTenureV">10 Yrs</span></div><div class="range-with-manual">
   <div class="range-main"><input id="sipTenure" type="range" min="1" max="40" value="10"></div>
@@ -1087,11 +1087,11 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <div class="grid"><div>
 <div class="field"><div class="head"><span class="label">Deposit amount</span><span class="value" id="fdV">₹2,00,000</span></div><div class="range-with-manual">
   <div class="range-main"><input id="fdAmt" type="range" min="10000" max="10000000" step="10000" value="200000"></div>
-  <div class="manual-value-wrap"><input id="manual_fdAmt" type="number" min="10000" max="10000000" step="10000" value="200000" inputmode="decimal" aria-label="Manual value for fdAmt"></div>
+  <div class="manual-value-wrap"><input id="manual_fdAmt" type="number" min="0" step="1" value="200000" inputmode="decimal" aria-label="Manual value for fdAmt"></div>
 </div></div>
 <div class="field"><div class="head"><span class="label">Interest rate (p.a.)</span><span class="value" id="fdRateV">7%</span></div><div class="range-with-manual">
-  <div class="range-main"><input id="fdRate" type="range" min="1" max="15" step=".1" value="7"></div>
-  <div class="manual-value-wrap"><input id="manual_fdRate" type="number" min="1" max="15" step=".1" value="7" inputmode="decimal" aria-label="Manual value for fdRate"></div>
+  <div class="range-main"><input id="fdRate" type="range" min="1" max="100" step=".1" value="7"></div>
+  <div class="manual-value-wrap"><input id="manual_fdRate" type="number" min="0" step=".1" value="7" inputmode="decimal" aria-label="Manual value for fdRate"></div>
 </div></div>
 <div class="field"><div class="head"><span class="label">Tenure</span><span class="value" id="fdTenureV">5 Yrs</span></div><div class="range-with-manual">
   <div class="range-main"><input id="fdTenure" type="range" min="1" max="10" step=".5" value="5"></div>
@@ -1110,11 +1110,11 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <div class="grid"><div>
 <div class="field"><div class="head"><span class="label">Principal amount</span><span class="value" id="intV">₹2,00,000</span></div><div class="range-with-manual">
   <div class="range-main"><input id="intAmt" type="range" min="1000" max="10000000" step="1000" value="200000"></div>
-  <div class="manual-value-wrap"><input id="manual_intAmt" type="number" min="1000" max="10000000" step="1000" value="200000" inputmode="decimal" aria-label="Manual value for intAmt"></div>
+  <div class="manual-value-wrap"><input id="manual_intAmt" type="number" min="0" step="1" value="200000" inputmode="decimal" aria-label="Manual value for intAmt"></div>
 </div></div>
 <div class="field"><div class="head"><span class="label">Rate of interest (p.a.)</span><span class="value" id="intRateV">10%</span></div><div class="range-with-manual">
-  <div class="range-main"><input id="intRate" type="range" min="0" max="50" step=".1" value="10"></div>
-  <div class="manual-value-wrap"><input id="manual_intRate" type="number" min="0" max="50" step=".1" value="10" inputmode="decimal" aria-label="Manual value for intRate"></div>
+  <div class="range-main"><input id="intRate" type="range" min="0" max="100" step=".1" value="10"></div>
+  <div class="manual-value-wrap"><input id="manual_intRate" type="number" min="0" step=".1" value="10" inputmode="decimal" aria-label="Manual value for intRate"></div>
 </div></div>
 <div class="field"><div class="head"><span class="label">Time period</span><span class="value" id="intTimeV">3 Yrs</span></div><div class="range-with-manual">
   <div class="range-main"><input id="intTime" type="range" min="1" max="30" value="3"></div>
@@ -1133,12 +1133,12 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
 <div class="grid"><div>
 <div class="field"><div class="head"><span class="label">Amount</span><span class="value" id="gstV">₹1,00,000</span></div><div class="range-with-manual">
   <div class="range-main"><input id="gstAmt" type="range" min="100" max="10000000" step="100" value="100000"></div>
-  <div class="manual-value-wrap"><input id="manual_gstAmt" type="number" min="100" max="10000000" step="100" value="100000" inputmode="decimal" aria-label="Manual value for gstAmt"></div>
+  <div class="manual-value-wrap"><input id="manual_gstAmt" type="number" min="0" step="1" value="100000" inputmode="decimal" aria-label="Manual value for gstAmt"></div>
 </div></div>
 <div class="field"><div class="head"><span class="label">GST rate</span><span class="value" id="gstRateV">18%</span></div><div class="range-with-manual">
-  <div class="range-main"><input id="gstRate" type="range" min="0" max="28" step=".5" value="18"></div>
-  <div class="manual-value-wrap"><input id="manual_gstRate" type="number" min="0" max="28" step=".5" value="18" inputmode="decimal" aria-label="Manual value for gstRate"></div>
-</div><div class="range-labels"><span>0%</span><span>28%</span></div></div>
+  <div class="range-main"><input id="gstRate" type="range" min="0" max="100" step=".5" value="18"></div>
+  <div class="manual-value-wrap"><input id="manual_gstRate" type="number" min="0" step=".1" value="18" inputmode="decimal" aria-label="Manual value for gstRate"></div>
+</div><div class="range-labels"><span>0%</span><span>100%</span></div></div>
 <div class="field"><div class="head"><span class="label">Amount mode</span><span class="value">Selected</span></div><select class="select-input" id="gstMode"><option value="exclusive">GST added to amount</option><option value="inclusive">GST already included</option></select></div>
 </div><div>
 <div class="hero"><div class="small">Final amount</div><div class="big" id="gstTotal">₹1,18,000</div></div>
@@ -1602,33 +1602,67 @@ if(loanGuide&&loanGuideHide&&loanGuideShow){
   });
 })();
 
-// Keep every slider and its manual number field synchronized. Manual entry is
-// clamped to the same limits as the slider and then the existing calculator
-// input handler is triggered, so calculations update immediately.
+// Keep sliders and manual fields synchronized without imposing the slider's limits on manual entry.
+// Manual amount fields can accept any non-negative value. When a value is outside the
+// current slider range, the slider range expands so the calculator continues using the exact value.
 const sliderManualPairs=['loanAmount','loanRate','loanTenure','ctcInput','pf','pt','tax','sipAmt','sipRate','sipTenure','fdAmt','fdRate','fdTenure','intAmt','intRate','intTime','gstAmt','gstRate'];
+const unrestrictedAmountIds=new Set(['loanAmount','ctcInput','sipAmt','fdAmt','intAmt','gstAmt']);
+const unrestrictedChargeIds=new Set(['loanProcessing','loanFeeGST','loanOtherCharges']);
+const rateIds=new Set(['loanRate','sipRate','fdRate','intRate','gstRate']);
+
 sliderManualPairs.forEach(id=>{
   const slider=$(id), manual=$("manual_"+id);
   if(!slider||!manual)return;
+
   manual.value=slider.value;
-  slider.addEventListener("input",()=>{manual.value=slider.value;});
-  manual.addEventListener("input",()=>{
-    let v=parseFloat(manual.value);
+  slider.addEventListener('input',()=>{ manual.value=slider.value; });
+
+  manual.addEventListener('input',()=>{
+    if(manual.value==='')return;
+    let v=Number(manual.value);
     if(!Number.isFinite(v))return;
-    const min=parseFloat(slider.min), max=parseFloat(slider.max), step=parseFloat(slider.step)||1;
-    if(Number.isFinite(min))v=Math.max(min,v);
-    if(Number.isFinite(max))v=Math.min(max,v);
-    if(step>0 && Number.isFinite(min)){
-      v=min+Math.round((v-min)/step)*step;
-      const decimals=(String(step).split('.')[1]||'').length;
-      v=Number(v.toFixed(decimals));
+
+    // Rates are intentionally limited to the requested 0–100% range.
+    if(rateIds.has(id)) v=Math.max(0,Math.min(100,v));
+    // Tenure keeps its existing practical limits.
+    if(id==='loanTenure'||id==='sipTenure'||id==='fdTenure'||id==='intTime'){
+      const min=Number(slider.min), max=Number(slider.max);
+      v=Math.max(min,Math.min(max,v));
     }
-    manual.value=v;
-    if(String(slider.value)!==String(v))slider.value=v;
-    slider.dispatchEvent(new Event("input",{bubbles:true}));
+
+    // Preserve exact manual amounts. Expand the slider instead of clamping the input.
+    if(unrestrictedAmountIds.has(id)){
+      const min=Number(slider.min)||0;
+      if(v<min) slider.min=String(v);
+      if(v>Number(slider.max)) slider.max=String(v);
+      slider.step='1';
+    }
+    if(rateIds.has(id)){
+      slider.min='0';
+      slider.max='100';
+      slider.step='.1';
+    }
+
+    manual.value=String(v);
+    slider.value=String(v);
+    slider.dispatchEvent(new Event('input',{bubbles:true}));
   });
-  manual.addEventListener("blur",()=>{
-    if(manual.value===""){manual.value=slider.value;return;}
-    manual.dispatchEvent(new Event("input",{bubbles:true}));
+
+  manual.addEventListener('blur',()=>{
+    if(manual.value==='') manual.value=slider.value;
+  });
+});
+
+// Additional loan charges are also free-form non-negative amounts.
+['loanProcessing','loanFeeGST','loanOtherCharges'].forEach(id=>{
+  const input=$(id); if(!input)return;
+  input.removeAttribute('max');
+  input.min='0';
+  input.step='1';
+  input.addEventListener('input',()=>{
+    const v=Math.max(0,Number(input.value)||0);
+    input.value=String(v);
+    renderLoan(+$('loanAmount').value,+$('loanRate').value,+$('loanTenure').value);
   });
 });
 </script>
