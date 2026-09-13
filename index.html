@@ -1116,9 +1116,9 @@ input[type=range]:active::-webkit-slider-thumb{transform:scale(1.15)}
   <div class="range-main"><input id="intRate" type="range" min="0" max="100" step=".1" value="10"></div>
   <div class="manual-value-wrap"><input id="manual_intRate" type="number" min="0" step=".1" value="10" inputmode="decimal" aria-label="Manual value for intRate"></div>
 </div></div>
-<div class="field"><div class="head"><span class="label">Time period (months)</span><span class="value" id="intTimeV">36 Months</span></div><div class="range-with-manual">
-  <div class="range-main"><input id="intTime" type="range" min="1" max="240" value="36"></div>
-  <div class="manual-value-wrap"><input id="manual_intTime" type="number" min="1" max="240" step="1" value="36" inputmode="numeric" aria-label="Manual value for intTime in months"></div>
+<div class="field"><div class="head"><span class="label">Time period</span><span class="value" id="intTimeV">3 Years</span></div><div class="range-with-manual">
+  <div class="range-main"><input id="intTime" type="range" min="1" max="240" step="0.1" value="36"></div>
+  <div class="manual-value-wrap"><input id="manual_intTime" type="number" min="1" max="240" step="0.1" value="36" inputmode="decimal" aria-label="Manual value for intTime in months"></div>
 </div><div class="range-labels"><span>1 month</span><span>240 months (20 years)</span></div></div>
 <div class="field"><div class="head"><span class="label">Calculation type</span><span class="value">Selected</span></div><select class="select-input" id="intType"><option value="simple">Simple Interest</option><option value="compound">Compound Interest</option></select></div>
 </div><div>
@@ -1272,12 +1272,22 @@ function calcFD(){
 }
 ["fdAmt","fdRate","fdTenure","fdFreq"].forEach(x=>$(x).addEventListener("input",calcFD));calcFD();
 
+function formatInterestTime(months){
+ const wholeMonths=Math.max(0,Math.round(months));
+ const years=Math.floor(wholeMonths/12);
+ const remainingMonths=wholeMonths%12;
+ const parts=[];
+ if(years) parts.push(`${years} Year${years===1?"":"s"}`);
+ if(remainingMonths || !years) parts.push(`${remainingMonths} Month${remainingMonths===1?"":"s"}`);
+ return parts.join(" ");
+}
+
 function calcInterest(){
  const P=+$("intAmt").value,a=+$("intRate").value/100,months=+$("intTime").value,t=months/12;
  let total;
  if($("intType").value==="simple")total=P*(1+a*t);else total=P*Math.pow(1+a,t);
  const interest=total-P;
- $("intV").textContent=money(P);$("intRateV").textContent=$("intRate").value+"%";$("intTimeV").textContent=months+(months===1?" Month":" Months");
+ $("intV").textContent=money(P);$("intRateV").textContent=$("intRate").value+"%";$("intTimeV").textContent=formatInterestTime(months);
  setText("intTotal",money(total));$("intPrincipal").textContent=money(P);$("intInterest").textContent=money(interest);$("intAmount").textContent=money(total);
 }
 ["intAmt","intRate","intTime","intType"].forEach(x=>$(x).addEventListener("input",calcInterest));calcInterest();
@@ -1632,8 +1642,9 @@ sliderManualPairs.forEach(id=>{
     // Interest time is entered directly in months with no maximum. Expand the slider when needed.
     if(id==='intTime'){
       v=Math.max(1,v);
+      v=Math.round(v*10)/10;
       if(v>Number(slider.max)) slider.max=String(v);
-      slider.step='1';
+      slider.step='0.1';
     }
 
     // Preserve exact manual amounts. Expand the slider instead of clamping the input.
